@@ -3,8 +3,6 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 
-import AlwaysHersongdat
-
 import streamlit as st
 
 @st.cache_data
