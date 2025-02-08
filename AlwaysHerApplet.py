@@ -7,20 +7,17 @@ import streamlit as st
 
 @st.cache_data
 def songdata():
-    root = "C:/Users/HUBFU/OneDrive/Documents/Always Her song data/AlwaysHerSpotifyData/"
-
-    # Read in song data csv files
     silhouette = pd.read_csv("Silhouette (The Halloween Song)-timeline.csv")
-    itb = pd.read_csv(root + "In the Beginning-timeline.csv")
-    erberger = pd.read_csv(root + "Airport Girl-timeline.csv")
-    mr_nice_guy = pd.read_csv(root + "Mr. Nice Guy-timeline.csv")
-    my_brain = pd.read_csv(root + "My Brain Is Carrying the World-timeline.csv")
-    olay = pd.read_csv(root + "One Look at You - Acoustic-timeline.csv")
-    prolly_nun = pd.read_csv(root + "Probably Nothing - Acoustic-timeline.csv")
-    savior = pd.read_csv(root + "Savior - Acoustic-timeline.csv")
-    itb_acous = pd.read_csv(root + "In the Beginning - Acoustic-timeline.csv")
-    erberger_acous = pd.read_csv(root + "Airport Girl - Acoustic-timeline.csv")
-    timeless = pd.read_csv(root + "Timeless-timeline.csv")
+    itb = pd.read_csv("In the Beginning-timeline.csv")
+    erberger = pd.read_csv("Airport Girl-timeline.csv")
+    mr_nice_guy = pd.read_csv( "Mr. Nice Guy-timeline.csv")
+    my_brain = pd.read_csv("My Brain Is Carrying the World-timeline.csv")
+    olay = pd.read_csv("One Look at You - Acoustic-timeline.csv")
+    prolly_nun = pd.read_csv("Probably Nothing - Acoustic-timeline.csv")
+    savior = pd.read_csv("Savior - Acoustic-timeline.csv")
+    itb_acous = pd.read_csv("In the Beginning - Acoustic-timeline.csv")
+    erberger_acous = pd.read_csv("Airport Girl - Acoustic-timeline.csv")
+    timeless = pd.read_csv("Timeless-timeline.csv")
 
     silhouette['song'] = 'Silhouette'
     itb['song'] = 'In the Beginning'
