@@ -113,7 +113,7 @@ scatter_data = total_streams_per_song.merge(
 ).drop(columns=["Song"]) 
 
 plt.style.use('dark_background')
-colors = plt.cm.get_cmap("Set3", len(scatter_data))
+colors = plt.cm.get_cmap("Paired", len(scatter_data))
 
 
 
@@ -141,7 +141,7 @@ with tab1:
         fig, ax = plt.subplots()
 
         for idx, (song, days, streams) in enumerate(zip(scatter_data["song"], scatter_data["days_since_release"], scatter_data["streams"])):
-            ax.scatter(days, streams, color=colors(idx), label=song, s=20, alpha=0.85)  
+            ax.scatter(days, streams, color=colors(idx), label=song, s=15, alpha=0.8)  
 
         # Trendline Calculation
         x = scatter_data["days_since_release"]
