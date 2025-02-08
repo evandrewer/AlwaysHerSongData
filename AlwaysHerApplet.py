@@ -63,12 +63,12 @@ tab1, tab2 = st.tabs(['General Stats', 'Cumulative Weekly Streams'])
 
 with tab1:
 
-    col1, col2 = st.columns([1, 3])
+    col1, col2 = st.columns([1, 1])
 
     with col1:
         st.subheader("Total Streams")
         total_streams_per_song.loc[len(total_streams_per_song)] = ['Total', grand_total]
-        st.dataframe(total_streams_per_song)
+        st.table(total_streams_per_song.style.format({'streams': '{:,}'}))
 
     with col2:
         st.subheader("your mom")
