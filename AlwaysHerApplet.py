@@ -99,11 +99,9 @@ release_dates["Release Date"] = pd.to_datetime(release_dates["Release Date"])
 today = pd.to_datetime("today")
 release_dates["Days Since Release"] = (today - release_dates["Release Date"]).dt.days
 
-filtered_release_df = (
-    release_dates[release_dates["Song"].isin(selected_songs)]
-    .sort_values(by="Days Since Release", ascending=False)
-    .set_index("Song")[["Days Since Release"]]
-)
+filtered_release_df = release_dates[release_dates["Song"].isin(selected_songs)]
+filtered_release_df = filtered_release_df.drop(columns=["Release Date"]).set_index("Song")
+
 
 
 tab1, tab2 = st.tabs(['General Stats', 'Cumulative Weekly Streams'])
