@@ -151,7 +151,7 @@ with tab1:
             coeffs = np.polyfit(x, y, deg=1)
             trendline = np.poly1d(coeffs)  
             sorted_x = np.sort(x)
-            ax.plot(sorted_x, trendline(sorted_x), linestyle="dashed", color="white", alpha=0.7, linewidth=1.2, label="Trendline")
+            ax.plot(sorted_x, trendline(sorted_x), linestyle="dashed", color="white", alpha=0.7, linewidth=0.8, label="Trendline")
 
         # Labels & Formatting
         ax.set_xlabel("Days Since Release", color='white')
