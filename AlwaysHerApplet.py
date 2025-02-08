@@ -23,12 +23,12 @@ def songdata():
     itb['song'] = 'In the Beginning'
     erberger['song'] = 'Airport Girl'
     mr_nice_guy['song'] = 'Mr. Nice Guy'
-    my_brain['song'] = 'My Brain Is Carrying the World'
-    olay['song'] = 'One Look At You'
-    prolly_nun['song'] = 'Probably Nothing (Acoustic)'
-    savior['song'] = 'Savior (Acoustic)'
-    itb_acous['song'] = 'In the Beginning (Acoustic)'
-    erberger_acous['song'] = 'Airport Girl (Acoustic)'
+    my_brain['song'] = 'My Brain is Carrying the World'
+    olay['song'] = 'One Look At You - Acoustic'
+    prolly_nun['song'] = 'Probably Nothing - Acoustic'
+    savior['song'] = 'Savior - Acoustic'
+    itb_acous['song'] = 'In the Beginning - Acoustic'
+    erberger_acous['song'] = 'Airport Girl - Acoustic'
     timeless['song'] = 'Timeless'
 
     combined_songs = pd.concat([silhouette, itb, erberger, mr_nice_guy, my_brain,
@@ -47,7 +47,7 @@ song_data = songdata()
 st.title("Always Her Spotify Stats")
 
 song_titles = ['Silhouette', 'In the Beginning', 'Airport Girl', 'Mr. Nice Guy', 
-               'My Brain Is Carrying the World', 'One Look At You - Acoustic',
+               'My Brain is Carrying the World', 'One Look At You - Acoustic',
                'Probably Nothing - Acoustic', 'Savior - Acoustic',
                'In the Beginning - Acoustic', 'Airport Girl - Acoustic', 'Timeless']
 selected_songs = st.sidebar.multiselect(
@@ -68,17 +68,12 @@ with tab1:
 
     with col1:
         st.subheader("Total Streams")
-
-        st.write("Selected Songs:", selected_songs)
-        st.write("Filtered Data:", data_by_song)
-
-        st.write("Total Streams Per Song:", total_streams_per_song)
-        
         total_streams_per_song = total_streams_per_song.rename(columns={'song': 'Song', 'streams': 'Streams'})
-        num_rows = len(total_streams_per_song)
-        table_height = min(1200, 50 + num_rows * 35)
 
-        st.dataframe(total_streams_per_song, hide_index=True, height=table_height, use_container_width=True)
+        st.dataframe(total_streams_per_song.style.set_properties(**{'text-align': 'left'}),
+                     hide_index=True, use_container_width=True)
+        
+        st.write(f"**Grand Total Streams**: {grand_total}")
 
     with col2:
         st.subheader("your mom")
