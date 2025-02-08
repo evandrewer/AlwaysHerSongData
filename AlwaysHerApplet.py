@@ -101,7 +101,7 @@ release_dates["Days Since Release"] = (today - release_dates["Release Date"]).dt
 
 filtered_release_df = release_dates[release_dates["Song"].isin(selected_songs)]
 filtered_release_df = filtered_release_df.drop(columns=["Release Date"]).set_index("Song")
-filtered_release_df = filtered_release_df.sort_values(by='growth_rate', ascending=False)
+filtered_release_df = filtered_release_df.sort_values(by='Days Since Release', ascending=False)
 
 
 
