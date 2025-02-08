@@ -87,14 +87,23 @@ data_by_song['growth_rate'] = data_by_song['growth_rate'].apply(lambda x: f"{x:.
 
 
 # For tab1, col3
-release_dates = song_data.groupby("song")["date"].min().reset_index()
+release_dates = (
+    song_data[song_data["streams"] > 0] 
+    .groupby("song")["date"]
+    .min()
+    .reset_index()
+)
 release_dates.columns = ["Song", "Release Date"]
 release_dates["Release Date"] = pd.to_datetime(release_dates["Release Date"])
 
 today = pd.to_datetime("today")
 release_dates["Days Since Release"] = (today - release_dates["Release Date"]).dt.days
 
-filtered_release_df = release_dates[release_dates["Song"].isin(selected_songs)].sort_values(by="Days Since Release", ascending=False)
+filtered_release_df = (
+    release_dates[release_dates["Song"].isin(selected_songs)]
+    .sort_values(by="Days Since Release", ascending=False)
+    .set_index("Song")[["Days Since Release"]]
+)
 
 
 tab1, tab2 = st.tabs(['General Stats', 'Cumulative Weekly Streams'])
