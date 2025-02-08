@@ -72,13 +72,10 @@ def calculate_growth_rate(group):
 
 data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate)
 
-# Check the dataframe with the moving growth rate
-st.write("Data with Moving Growth Rate", data_by_song)
-
 growth_rate_per_song = (data_by_song.groupby('song', as_index=False)
-                        .agg({'moving_growth_rate': 'last'}))
+                        .agg({'growth_rate': 'last'}))
 
-growth_rate_per_song = growth_rate_per_song.sort_values(by='moving_growth_rate', ascending=False)
+growth_rate_per_song = growth_rate_per_song.sort_values(by='growth_rate', ascending=False)
 
 
 
