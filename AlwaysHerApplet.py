@@ -126,18 +126,18 @@ with tab1:
 
     with col3:
         st.subheader("Days Since Release")
-        filtered_release_df = filtered_release_df.rename(columns={'song': 'Song', 'Days Since Release': 'Days'})
+        filtered_release_df = filtered_release_df.rename(columns={'song': 'Song', 'days_since_release': 'Days'})
         st.dataframe(filtered_release_df, hide_index=False, use_container_width=True, height = 422)
 
     with col4:
         st.subheader("Days Since Release vs. Streams")
 
         fig, ax = plt.subplots()
-        for song in song_data['song'].unique():
-            subset = song_data[song_data['song'] == song]
+        for song in release_dates['song'].unique():
+            subset = release_dates[release_dates['song'] == song]
             ax.scatter(subset['days_since_release'], subset['streams'], label=song)
 
         ax.set_xlabel("Days Since Release")
         ax.set_ylabel("Streams")
-        ax.legend(fontsize=8, loc='upper right', bbox_to_anchor=(1.3, 1))  # Adjust for readability
+        ax.legend(fontsize=8, loc='upper right', bbox_to_anchor=(1.3, 1))
         st.pyplot(fig)
