@@ -154,11 +154,11 @@ with tab1:
         if len(x) > 1:
             coeffs = np.polyfit(x, y, deg=1)
             trendline = np.poly1d(coeffs)  
-            ax.plot(x, trendline(x), linestyle="dashed", color="black", linewidth=1.5, label="Trendline")
+            ax.plot(x, trendline(x), linestyle="dashed", color="black", linewidth=1.2, label="Trendline")
 
         # Labels & Formatting
         ax.set_xlabel("Days Since Release")
         ax.set_ylabel("Total Streams")
-        ax.legend(loc="upper left", bbox_to_anchor=(1, 1))  
+        ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=3)
 
         st.pyplot(fig)
