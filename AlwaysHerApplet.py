@@ -124,4 +124,4 @@ with tab1:
 
     with col3:
         st.subheader("Days Since Release")
-        st.dataframe(filtered_release_df.set_index("Song"), use_container_width=True, hide_index=False, height = 422)
+        st.dataframe(filtered_release_df, use_container_width=True, hide_index=False, height = 422)
