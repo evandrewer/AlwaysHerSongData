@@ -133,7 +133,7 @@ with tab1:
         filtered_release_df = filtered_release_df.rename(columns={'song': 'Song', 'days_since_release': 'Days'})
         st.dataframe(filtered_release_df, hide_index=False, use_container_width=True, height = 422)
 
-    col3, col4 = st.columns([2, 3])
+    col3, col4 = st.columns([3, 4])
 
     with col3:
         st.subheader("10-day Growth Rate")
