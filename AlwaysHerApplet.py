@@ -167,3 +167,5 @@ with tab1:
         st.subheader("10-day Growth Rate")
         growth_rate_per_song = growth_rate_per_song.rename(columns={'song': 'Song', 'growth_rate': 'Growth Rate %'})
         st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 423)
+
+#Gyatt
