@@ -140,7 +140,7 @@ with tab1:
         fig, ax = plt.subplots()
 
         for idx, (song, days, streams) in enumerate(zip(scatter_data["song"], scatter_data["days_since_release"], scatter_data["streams"])):
-            ax.scatter(days, streams, color=colors(idx), label=song, s=50, alpha=0.7)  
+            ax.scatter(days, streams, color=colors(idx), label=song, s=30, alpha=0.7)  
 
         # Trendline Calculation
         x = scatter_data["days_since_release"]
