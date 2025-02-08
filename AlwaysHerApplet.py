@@ -65,7 +65,7 @@ grand_total = total_streams_per_song['streams'].sum()
 
 
 # For tab1 col2
-#data_by_song['cumulative_streams'] = data_by_song.groupby('song')['streams'].cumsum() 
+data_by_song['cumulative_streams'] = data_by_song.groupby('song')['streams'].cumsum() 
 
 def calculate_growth_rate(group):
 #    group['growth_rate'] = group['cumulative_streams'].pct_change(periods=21) * 100   #(Cumulative)
