@@ -71,7 +71,7 @@ with tab1:
     with col1:
         st.subheader("Total Streams")
         total_streams_per_song.loc[len(total_streams_per_song)] = ['Total', grand_total]
-        total_streams_per_song = total_streams_per_song.rename(columns={'song': '', 'streams': ''})
+        total_streams_per_song = total_streams_per_song.rename(columns={'song': 'Song', 'streams': 'Streams'})
 
         st.table(total_streams_per_song.style.hide(axis="index"))
 
