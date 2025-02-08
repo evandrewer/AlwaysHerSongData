@@ -38,6 +38,9 @@ def songdata():
 
     return combined_songs
 
+
+# App code
+
 song_data = songdata()
 
 
@@ -50,3 +53,10 @@ song_titles = ['Silhouette', 'In the Beginning', 'Airport Girl', 'Mr. Nice Guy',
 selected_songs = st.sidebar.multiselect(
     "Select Songs", options=song_titles, default=song_titles)
 data_by_song = song_data[song_data['song'].isin(selected_songs)]
+
+
+tab1, tab2 = st.tabs(['General Stats', 'Cumulative Weekly Streams'])
+
+with tab1:
+    
+    col1, col2 = st.columns([1, 3])
