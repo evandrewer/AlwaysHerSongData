@@ -133,14 +133,9 @@ with tab1:
         filtered_release_df = filtered_release_df.rename(columns={'song': 'Song', 'days_since_release': 'Days'})
         st.dataframe(filtered_release_df, hide_index=False, use_container_width=True, height = 422)
 
-    col3, col4 = st.columns([3, 4])
+    col3 = st.columns([1])[0]
 
     with col3:
-        st.subheader("10-day Growth Rate")
-        growth_rate_per_song = growth_rate_per_song.rename(columns={'song': 'Song', 'growth_rate': 'Growth Rate %'})
-        st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 423)
-
-    with col4:
         st.subheader("Days Since Release vs. Total Streams")
         fig, ax = plt.subplots()
 
@@ -163,3 +158,10 @@ with tab1:
         ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=3)
 
         st.pyplot(fig)
+
+    col4 = st.columns([1])[0]
+
+    with col4:
+        st.subheader("10-day Growth Rate")
+        growth_rate_per_song = growth_rate_per_song.rename(columns={'song': 'Song', 'growth_rate': 'Growth Rate %'})
+        st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 423)
