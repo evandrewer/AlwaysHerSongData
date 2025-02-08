@@ -68,9 +68,14 @@ grand_total = total_streams_per_song['streams'].sum()
 data_by_song['cumulative_streams'] = data_by_song.groupby('song')['streams'].cumsum() 
 
 def calculate_growth_rate(group):
-#    group['growth_rate'] = group['cumulative_streams'].pct_change(periods=21) * 100   #(Cumulative)
-    group['growth_rate'] = group['streams'].pct_change(periods=10) * 100              #(Normal)
+    # Calculate the rolling averages for the last 10 days and the 10 days prior
+    group['avg_last_10_days'] = group['streams'].rolling(window=10, min_periods=1).mean()
+    group['avg_prior_10_days'] = group['streams'].shift(10).rolling(window=10, min_periods=1).mean()
+    
+    # Calculate the growth rate between the two averages
+    group['growth_rate'] = ((group['avg_last_10_days'] - group['avg_prior_10_days']) / group['avg_prior_10_days']) * 100
     return group
+
 
 data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate)
 
