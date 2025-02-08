@@ -103,6 +103,7 @@ filtered_release_df = release_dates[release_dates["Song"].isin(selected_songs)]
 filtered_release_df = filtered_release_df.drop(columns=["Release Date"]).set_index("Song")
 filtered_release_df = filtered_release_df.sort_values(by='days_since_release', ascending=False)
 
+
 # For tab1, col4
 scatter_data = total_streams_per_song.merge(
     release_dates[["Song", "days_since_release"]],
@@ -110,6 +111,8 @@ scatter_data = total_streams_per_song.merge(
     right_on="Song",
     how="left"
 ).drop(columns=["Song"]) 
+
+colors = plt.cm.get_cmap("tab10", len(scatter_data))
 
 
 
@@ -139,14 +142,23 @@ with tab1:
 
     with col4:
         st.subheader("Days Since Release vs. Total Streams")
-
         fig, ax = plt.subplots()
-        ax.scatter(scatter_data["days_since_release"], scatter_data["streams"], alpha=0.7)
 
+        for idx, (song, days, streams) in enumerate(zip(scatter_data["song"], scatter_data["days_since_release"], scatter_data["streams"])):
+            ax.scatter(days, streams, color=colors(idx), label=song, s=50, alpha=0.7)  
+
+        # Trendline Calculation
+        x = scatter_data["days_since_release"]
+        y = scatter_data["streams"]
+        
+        if len(x) > 1:
+            coeffs = np.polyfit(x, y, deg=1)
+            trendline = np.poly1d(coeffs)  
+            ax.plot(x, trendline(x), linestyle="dashed", color="black", linewidth=1.5, label="Trendline")
+
+        # Labels & Formatting
         ax.set_xlabel("Days Since Release")
         ax.set_ylabel("Total Streams")
-        
-        for i, row in scatter_data.iterrows():
-            ax.annotate(row["song"], (row["days_since_release"], row["streams"]), fontsize=8, ha="right")
+        ax.legend(loc="upper left", bbox_to_anchor=(1, 1))  
 
         st.pyplot(fig)
