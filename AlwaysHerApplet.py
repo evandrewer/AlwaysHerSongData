@@ -138,7 +138,7 @@ with tab1:
     with col3:
         st.subheader("10-day Growth Rate")
         growth_rate_per_song = growth_rate_per_song.rename(columns={'song': 'Song', 'growth_rate': 'Growth Rate %'})
-        st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 422)
+        st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 423)
 
     with col4:
         st.subheader("Days Since Release vs. Total Streams")
@@ -154,7 +154,8 @@ with tab1:
         if len(x) > 1:
             coeffs = np.polyfit(x, y, deg=1)
             trendline = np.poly1d(coeffs)  
-            ax.plot(x, trendline(x), linestyle="dashed", color="gray", linewidth=1.2, label="Trendline")
+            sorted_x = np.sort(x)
+            ax.plot(sorted_x, trendline(sorted_x), linestyle="dashed", color="gray", linewidth=1.2, label="Trendline")
 
         # Labels & Formatting
         ax.set_xlabel("Days Since Release")
