@@ -69,8 +69,10 @@ with tab1:
     with col1:
         st.subheader("Total Streams")
         total_streams_per_song = total_streams_per_song.rename(columns={'song': 'Song', 'streams': 'Streams'})
+        num_rows = len(total_streams_per_song)
+        table_height = min(500, 50 + num_rows * 35)
 
-        st.table(total_streams_per_song)
+        st.dataframe(total_streams_per_song, hide_index=True, height=table_height, use_container_width=True)
 
     with col2:
         st.subheader("your mom")
