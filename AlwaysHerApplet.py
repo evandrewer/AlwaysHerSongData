@@ -6,7 +6,7 @@ import numpy as np
 import streamlit as st
 
 @st.cache_data
-def songdata():
+def songdata(ttl=0):
     silhouette = pd.read_csv("Silhouette (The Halloween Song)-timeline.csv")
     itb = pd.read_csv("In the Beginning-timeline.csv")
     erberger = pd.read_csv("Airport Girl-timeline.csv")
@@ -43,7 +43,6 @@ def songdata():
 
 song_data = songdata()
 
-song_data.tail()
 
 st.title("Always Her Spotify Stats")
 
