@@ -58,5 +58,11 @@ data_by_song = song_data[song_data['song'].isin(selected_songs)]
 tab1, tab2 = st.tabs(['General Stats', 'Cumulative Weekly Streams'])
 
 with tab1:
-    
+
     col1, col2 = st.columns([1, 3])
+
+    with col1:
+        st.subheader("Total Streams")
+
+    with col2:
+        st.subheader("your mom")
