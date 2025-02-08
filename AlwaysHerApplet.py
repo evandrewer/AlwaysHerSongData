@@ -76,7 +76,6 @@ def calculate_growth_rate(group):
     group['growth_rate'] = ((group['avg_last_10_days'] - group['avg_prior_10_days']) / group['avg_prior_10_days']) * 100
     return group
 
-
 data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate)
 
 growth_rate_per_song = (data_by_song.groupby('song', as_index=False)
@@ -87,6 +86,15 @@ growth_rate_per_song = growth_rate_per_song.sort_values(by='growth_rate', ascend
 data_by_song['growth_rate'] = data_by_song['growth_rate'].apply(lambda x: f"{x:.2f}%")
 
 
+# For tab1, col3
+release_dates = song_data.groupby("song")["date"].min().reset_index()
+release_dates.columns = ["Song", "Release Date"]
+release_dates["Release Date"] = pd.to_datetime(release_dates["Release Date"])
+
+today = pd.to_datetime("today")
+release_dates["Days Since Release"] = (today - release_dates["Release Date"]).dt.days
+
+filtered_release_df = release_dates[release_dates["Song"].isin(selected_songs)].sort_values(by="Days Since Release", ascending=False)
 
 
 tab1, tab2 = st.tabs(['General Stats', 'Cumulative Weekly Streams'])
@@ -104,8 +112,9 @@ with tab1:
     col2, col3 = st.columns([1, 1])
 
     with col2:
-        st.subheader("10-day vs prior 10-day Growth Rate")
+        st.subheader("10-day Growth Rate")
         st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 422)
 
     with col3:
-        st.subheader("Your Third Section")
+        st.subheader("Days Since Release")
+        st.dataframe(filtered_release_df.set_index("Song"), use_container_width=True, hide_index=False, height = 422)
