@@ -54,7 +54,10 @@ selected_songs = st.sidebar.multiselect(
     "Select Songs", options=song_titles, default=song_titles)
 data_by_song = song_data[song_data['song'].isin(selected_songs)]
 
-total_streams_per_song = data_by_song.groupby('song')['streams'].sum().reset_index() # For tab1 col1
+total_streams_per_song = (data_by_song.groupby('song')['streams']
+                          .sum()
+                          .reindex(selected_songs, fill_value=0)
+                          .reset_index()) # For tab1 col1
 
 grand_total = total_streams_per_song['streams'].sum() # For tab1 col1
 
@@ -68,7 +71,9 @@ with tab1:
     with col1:
         st.subheader("Total Streams")
         total_streams_per_song.loc[len(total_streams_per_song)] = ['Total', grand_total]
-        st.table(total_streams_per_song.style.format({'streams': '{:,}'}))
+        total_streams_per_song = total_streams_per_song.rename(columns={'song': '', 'streams': ''})
+
+        st.table(total_streams_per_song.style.hide(axis="index"))
 
     with col2:
         st.subheader("your mom")
