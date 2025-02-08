@@ -120,8 +120,10 @@ with tab1:
 
     with col2:
         st.subheader("10-day Growth Rate")
+        growth_rate_per_song = growth_rate_per_song.rename(columns={'song': 'Song', 'growth_rate': 'Growth Rate %'})
         st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 422)
 
     with col3:
         st.subheader("Days Since Release")
-        st.dataframe(filtered_release_df, use_container_width=True, hide_index=False, height = 422)
+        filtered_release_df = filtered_release_df.rename(columns={'song': 'Song'})
+        st.dataframe(filtered_release_df, hide_index=False, use_container_width=True, height = 422)
