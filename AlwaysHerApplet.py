@@ -10,7 +10,7 @@ def songdata():
     root = "C:/Users/HUBFU/OneDrive/Documents/Always Her song data/AlwaysHerSpotifyData/"
 
     # Read in song data csv files
-    silhouette = pd.read_csv(root + "Silhouette (The Halloween Song)-timeline.csv")
+    silhouette = pd.read_csv("Silhouette (The Halloween Song)-timeline.csv")
     itb = pd.read_csv(root + "In the Beginning-timeline.csv")
     erberger = pd.read_csv(root + "Airport Girl-timeline.csv")
     mr_nice_guy = pd.read_csv(root + "Mr. Nice Guy-timeline.csv")
@@ -50,6 +50,6 @@ song_titles = ['Silhouette', 'In the Beginning', 'Airport Girl', 'Mr. Nice Guy',
                'My Brain Is Carrying the World', 'One Look At You - Acoustic',
                'Probably Nothing - Acoustic', 'Savior - Acoustic',
                'In the Beginning - Acoustic', 'Airport Girl - Acoustic', 'Timeless']
-selected_regions = st.sidebar.multiselect(
+selected_songs = st.sidebar.multiselect(
     "Select Songs", options=song_titles, default=song_titles)
-regional_poke_data = song_data[song_data['song'].isin(selected_regions)]
+data_by_song = song_data[song_data['song'].isin(selected_songs)]
