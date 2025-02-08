@@ -90,7 +90,7 @@ tab1, tab2 = st.tabs(['General Stats', 'Cumulative Weekly Streams'])
 
 with tab1:
 
-    col1, col2 = st.columns([1, 1])
+    col1 = st.columns([1])[0]
 
     with col1:
         st.subheader("Total Streams")
@@ -100,7 +100,13 @@ with tab1:
         
         st.write(f"**Grand Total Streams**: {grand_total}")
 
+    col2, col3 = st.columns([1, 1])
+
     with col2:
-        st.subheader("3-week Growth Rate")
+        st.subheader("10-day vs prior 10-day Growth Rate")
+        data_by_song['growth_rate'] = data_by_song['growth_rate'].apply(lambda x: f"{x:.2f}%")
 
         st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 422)
+
+    with col3:
+        st.subheader("Your Third Section")
