@@ -97,11 +97,11 @@ release_dates.columns = ["Song", "Release Date"]
 release_dates["Release Date"] = pd.to_datetime(release_dates["Release Date"])
 
 today = pd.to_datetime("today")
-release_dates["Days Since Release"] = (today - release_dates["Release Date"]).dt.days
+release_dates["days_since_release"] = (today - release_dates["Release Date"]).dt.days
 
 filtered_release_df = release_dates[release_dates["Song"].isin(selected_songs)]
 filtered_release_df = filtered_release_df.drop(columns=["Release Date"]).set_index("Song")
-filtered_release_df = filtered_release_df.sort_values(by='Days Since Release', ascending=False)
+filtered_release_df = filtered_release_df.sort_values(by='days_since_release', ascending=False)
 
 
 
@@ -135,7 +135,7 @@ with tab1:
         fig, ax = plt.subplots()
         for song in song_data['song'].unique():
             subset = song_data[song_data['song'] == song]
-            ax.scatter(subset['Days Since Release'], subset['streams'], label=song)
+            ax.scatter(subset['days_since_release'], subset['streams'], label=song)
 
         ax.set_xlabel("Days Since Release")
         ax.set_ylabel("Streams")
