@@ -72,7 +72,7 @@ with tab1:
         st.subheader("Total Streams")
         total_streams_per_song = total_streams_per_song.rename(columns={'song': 'Song', 'streams': 'Streams'})
 
-        st.dataframe(total_streams_per_song, hide_index=True, use_container_width=True, height = 1250)
+        st.dataframe(total_streams_per_song, hide_index=True, use_container_width=True, height = 550)
         
         st.write(f"**Grand Total Streams**: {grand_total}")
 
