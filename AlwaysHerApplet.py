@@ -66,13 +66,11 @@ grand_total = total_streams_per_song['streams'].sum()
 # For tab1 col2
 data_by_song['cumulative_streams'] = data_by_song.groupby('song')['streams'].cumsum() 
 
-# Check if cumulative streams are correctly added
-st.write("Data with Cumulative Streams", data_by_song)
-
 def calculate_growth_rate(group):
     # Calculate 21-day moving growth rate based on cumulative streams
-    growth_rate = group['cumulative_streams'].pct_change(periods=21) * 100
-    return growth_rate
+    st.write(f"Group: {group['song'].iloc[0]}")  # Debug which song we're working on
+    group['growth_rate'] = group['cumulative_streams'].pct_change(periods=21) * 100
+    return group
 
 data_by_song['moving_growth_rate'] = data_by_song.groupby('song')['cumulative_streams'].apply(calculate_growth_rate)
 
