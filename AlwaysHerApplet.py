@@ -113,7 +113,7 @@ scatter_data = total_streams_per_song.merge(
 ).drop(columns=["Song"]) 
 
 plt.style.use('dark_background')
-colors = plt.cm.get_cmap("Paired", len(scatter_data))
+colors = plt.cm.get_cmap("tab20", len(scatter_data))
 
 
 
