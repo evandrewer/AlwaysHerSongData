@@ -6,8 +6,8 @@ import numpy as np
 import streamlit as st
 
 @st.cache_data
-def song_data():
-    root = "C:/Users/HUBFU/OneDrive/Documents/Always Her song data/"
+def songdata():
+    root = "C:/Users/HUBFU/OneDrive/Documents/Always Her song data/AlwaysHerSpotifyData/"
 
     # Read in song data csv files
     silhouette = pd.read_csv(root + "Silhouette (The Halloween Song)-timeline.csv")
@@ -41,7 +41,7 @@ def song_data():
 
     return combined_songs
 
-songs = song_data()
+song_data = songdata()
 
 
 st.title("Always Her Spotify Stats")
@@ -52,4 +52,4 @@ song_titles = ['Silhouette', 'In the Beginning', 'Airport Girl', 'Mr. Nice Guy',
                'In the Beginning - Acoustic', 'Airport Girl - Acoustic', 'Timeless']
 selected_regions = st.sidebar.multiselect(
     "Select Songs", options=song_titles, default=song_titles)
-regional_poke_data = songs[songs['song'].isin(selected_regions)]
+regional_poke_data = song_data[song_data['song'].isin(selected_regions)]
