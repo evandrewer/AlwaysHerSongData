@@ -135,7 +135,7 @@ with tab1:
         fig, ax = plt.subplots()
         for song in song_data['song'].unique():
             subset = song_data[song_data['song'] == song]
-            ax.scatter(subset['days_since_release'], subset['streams'], label=song)
+            ax.scatter(subset['Days Since Release'], subset['streams'], label=song)
 
         ax.set_xlabel("Days Since Release")
         ax.set_ylabel("Streams")
