@@ -68,7 +68,7 @@ with tab1:
     with col1:
         st.subheader("Total Streams")
         total_streams_per_song.loc[len(total_streams_per_song)] = ['Total', grand_total]
-        st.table(total_streams_per_song)
+        st.dataframe(total_streams_per_song)
 
     with col2:
         st.subheader("your mom")
