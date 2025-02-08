@@ -43,6 +43,7 @@ def songdata():
 
 song_data = songdata()
 
+song_data.tail()
 
 st.title("Always Her Spotify Stats")
 
