@@ -104,12 +104,12 @@ filtered_release_df = filtered_release_df.drop(columns=["Release Date"]).set_ind
 filtered_release_df = filtered_release_df.sort_values(by='days_since_release', ascending=False)
 
 # For tab1, col4
-song_data = song_data.merge(
-    release_dates[['Song', 'days_since_release']], 
-    left_on='song', right_on='Song', 
-    how='left'
-).drop(columns=['Song']) 
-
+scatter_data = total_streams_per_song.merge(
+    release_dates[["Song", "days_since_release"]],
+    left_on="song",
+    right_on="Song",
+    how="left"
+).drop(columns=["Song"]) 
 
 
 
@@ -138,14 +138,15 @@ with tab1:
         st.dataframe(filtered_release_df, hide_index=False, use_container_width=True, height = 422)
 
     with col4:
-        st.subheader("Days Since Release vs. Streams")
+        st.subheader("Days Since Release vs. Total Streams")
 
         fig, ax = plt.subplots()
-        for song in selected_songs:
-            subset = song_data[song_data['song'] == song]
-            ax.scatter(subset['days_since_release'], subset['streams'], label=song)
+        ax.scatter(scatter_data["days_since_release"], scatter_data["streams"], alpha=0.7)
 
         ax.set_xlabel("Days Since Release")
-        ax.set_ylabel("Streams")
-        ax.legend(fontsize=8, loc='upper right', bbox_to_anchor=(1.3, 1))
+        ax.set_ylabel("Total Streams")
+        
+        for i, row in scatter_data.iterrows():
+            ax.annotate(row["song"], (row["days_since_release"], row["streams"]), fontsize=8, ha="right")
+
         st.pyplot(fig)
