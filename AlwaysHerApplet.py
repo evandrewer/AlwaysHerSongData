@@ -55,11 +55,29 @@ selected_songs = st.sidebar.multiselect(
 data_by_song = song_data[song_data['song'].isin(selected_songs)]
 
 
+# For tab1 col1
 total_streams_per_song = (data_by_song.groupby('song', as_index=False)['streams']
                           .sum()) 
-total_streams_per_song = total_streams_per_song.sort_values(by='streams', ascending=False) # For tab1 col1
+total_streams_per_song = total_streams_per_song.sort_values(by='streams', ascending=False)
 
-grand_total = total_streams_per_song['streams'].sum() # For tab1 col1
+grand_total = total_streams_per_song['streams'].sum() 
+
+
+# For tab1 col2
+data_by_song['cumulative_streams'] = data_by_song.groupby('song')['streams'].cumsum() 
+
+def calculate_growth_rate(group):
+    # Calculate 21-day moving growth rate based on cumulative streams
+    growth_rate = group['cumulative_streams'].pct_change(periods=21) * 100
+    return growth_rate
+
+data_by_song['moving_growth_rate'] = data_by_song.groupby('song')['cumulative_streams'].apply(calculate_growth_rate)
+
+growth_rate_per_song = (data_by_song.groupby('song', as_index=False)
+                        .agg({'moving_growth_rate': 'last'}))
+
+growth_rate_per_song = growth_rate_per_song.sort_values(by='moving_growth_rate', ascending=False)
+
 
 
 tab1, tab2 = st.tabs(['General Stats', 'Cumulative Weekly Streams'])
@@ -77,4 +95,6 @@ with tab1:
         st.write(f"**Grand Total Streams**: {grand_total}")
 
     with col2:
-        st.subheader("your mom")
+        st.subheader("3-week Growth Rate")
+
+        st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 422)
