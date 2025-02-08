@@ -68,8 +68,8 @@ grand_total = total_streams_per_song['streams'].sum()
 data_by_song['cumulative_streams'] = data_by_song.groupby('song')['streams'].cumsum() 
 
 def calculate_growth_rate(group):
-#    group['growth_rate'] = group['cumulative_streams'].pct_change(periods=21) * 100   #(Cumulative)
-    group['growth_rate'] = group['streams'].pct_change(periods=21) * 100              #(Normal)
+    group['growth_rate'] = group['cumulative_streams'].pct_change(periods=14) * 100   #(Cumulative)
+#    group['growth_rate'] = group['streams'].pct_change(periods=21) * 100              #(Normal)
     return group
 
 data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate)
