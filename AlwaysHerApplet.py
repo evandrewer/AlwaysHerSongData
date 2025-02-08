@@ -41,5 +41,15 @@ def song_data():
 
     return combined_songs
 
+songs = song_data()
+
 
 st.title("Always Her Spotify Stats")
+
+song_titles = ['Silhouette', 'In the Beginning', 'Airport Girl', 'Mr. Nice Guy', 
+               'My Brain Is Carrying the World', 'One Look At You - Acoustic',
+               'Probably Nothing - Acoustic', 'Savior - Acoustic',
+               'In the Beginning - Acoustic', 'Airport Girl - Acoustic', 'Timeless']
+selected_regions = st.sidebar.multiselect(
+    "Select Songs", options=song_titles, default=song_titles)
+regional_poke_data = songs[songs['song'].isin(selected_regions)]
