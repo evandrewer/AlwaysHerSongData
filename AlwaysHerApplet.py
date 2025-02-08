@@ -103,6 +103,14 @@ filtered_release_df = release_dates[release_dates["Song"].isin(selected_songs)]
 filtered_release_df = filtered_release_df.drop(columns=["Release Date"]).set_index("Song")
 filtered_release_df = filtered_release_df.sort_values(by='days_since_release', ascending=False)
 
+# For tab1, col4
+song_data = song_data.merge(
+    release_dates[['Song', 'days_since_release']], 
+    left_on='song', right_on='Song', 
+    how='left'
+).drop(columns=['Song']) 
+
+
 
 
 tab1, tab2 = st.tabs(['General Stats', 'Cumulative Weekly Streams'])
@@ -133,8 +141,8 @@ with tab1:
         st.subheader("Days Since Release vs. Streams")
 
         fig, ax = plt.subplots()
-        for song in release_dates['song'].unique():
-            subset = release_dates[release_dates['song'] == song]
+        for song in selected_songs:
+            subset = song_data[song_data['song'] == song]
             ax.scatter(subset['days_since_release'], subset['streams'], label=song)
 
         ax.set_xlabel("Days Since Release")
