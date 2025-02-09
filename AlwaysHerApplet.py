@@ -67,23 +67,29 @@ grand_total = total_streams_per_song['streams'].sum()
 # For tab1 col2
 data_by_song['cumulative_streams'] = data_by_song.groupby('song')['streams'].cumsum() 
 
-def calculate_growth_rate(group):
-    # Calculate the rolling averages for the last 10 days and the 10 days prior
+def calculate_growth_rate(group, global_baseline):
+    group = group.copy()
     group['avg_last_10_days'] = group['streams'].rolling(window=10, min_periods=1).mean()
-    group['avg_prior_10_days'] = group['streams'].shift(10).rolling(window=10, min_periods=1).mean()
-    
+    group['avg_prior_10_days'] = global_baseline.shift(10)
+
     # Calculate the growth rate between the two averages
     group['growth_rate'] = ((group['avg_last_10_days'] - group['avg_prior_10_days']) / group['avg_prior_10_days']) * 100
     return group
 
-data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate)
+global_baseline = (
+    data_by_song.groupby('date')['streams']
+    .mean()
+    .rolling(window=10, min_periods=1)
+    .mean()
+)
 
-growth_rate_per_song = (data_by_song.groupby('song', as_index=False)
-                        .agg({'growth_rate': 'last'}))
+data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate, global_baseline)
 
-growth_rate_per_song = growth_rate_per_song.sort_values(by='growth_rate', ascending=False)
-
-data_by_song['growth_rate'] = data_by_song['growth_rate'].apply(lambda x: f"{x:.2f}%")
+growth_rate_per_song = (data_by_song
+                        .dropna(subset=['growth_rate'])  # Remove NaN values
+                        .groupby('song', as_index=False)
+                        .agg({'growth_rate': 'last'})  # Take last non-null value
+                        .sort_values(by='growth_rate', ascending=False))
 
 
 # For tab1, col3
@@ -167,5 +173,3 @@ with tab1:
         st.subheader("10-day Growth Rate")
         growth_rate_per_song = growth_rate_per_song.rename(columns={'song': 'Song', 'growth_rate': 'Growth Rate %'})
         st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 423)
-
-#Gyatt
