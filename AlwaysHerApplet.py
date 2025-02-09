@@ -64,13 +64,13 @@ total_streams_per_song = total_streams_per_song.sort_values(by='streams', ascend
 grand_total = total_streams_per_song['streams'].sum() 
 
 
-# For tab1 col2
+# For tab1 col4
 data_by_song['cumulative_streams'] = data_by_song.groupby('song')['streams'].cumsum() 
 
 def calculate_growth_rate(group, global_baseline):
     group = group.copy()
     group['avg_last_10_days'] = group['streams'].rolling(window=10, min_periods=1).mean()
-    group['avg_prior_10_days'] = global_baseline.shift(10)
+    group = group.merge(global_baseline, on='date', how='left', suffixes=('', '_global'))
 
     # Calculate the growth rate between the two averages
     group['growth_rate'] = ((group['avg_last_10_days'] - group['avg_prior_10_days']) / group['avg_prior_10_days']) * 100
@@ -81,6 +81,8 @@ global_baseline = (
     .mean()
     .rolling(window=10, min_periods=1)
     .mean()
+    .shift(10)  # Shift AFTER rolling
+    .reset_index(name='avg_prior_10_days')
 )
 
 data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate, global_baseline)
@@ -92,7 +94,7 @@ growth_rate_per_song = (data_by_song
                         .sort_values(by='growth_rate', ascending=False))
 
 
-# For tab1, col3
+# For tab1, col2
 release_dates = (
     song_data[song_data["streams"] > 0] 
     .groupby("song")["date"]
@@ -110,7 +112,7 @@ filtered_release_df = filtered_release_df.drop(columns=["Release Date"]).set_ind
 filtered_release_df = filtered_release_df.sort_values(by='days_since_release', ascending=False)
 
 
-# For tab1, col4
+# For tab1, col3
 scatter_data = total_streams_per_song.merge(
     release_dates[["Song", "days_since_release"]],
     left_on="song",
