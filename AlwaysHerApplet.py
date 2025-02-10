@@ -57,14 +57,6 @@ data_by_song = song_data[song_data['song'].isin(selected_songs)]
 
 
 # For tab1 col1
-total_streams_per_song = (data_by_song.groupby('song', as_index=False)['streams']
-                          .sum()) 
-total_streams_per_song = total_streams_per_song.sort_values(by='streams', ascending=False)
-
-grand_total = total_streams_per_song['streams'].sum() 
-
-
-
 song_summary = (data_by_song[data_by_song["streams"] > 0]
                 .groupby('song', as_index=False)
                 .agg(Streams=('streams', 'sum'),
@@ -81,39 +73,15 @@ song_summary = song_summary.sort_values(by='Streams', ascending=False)
 grand_total = song_summary["Streams"].sum()
 
 
-# For tab1, col2
-release_dates = (
-    song_data[song_data["streams"] > 0] 
-    .groupby("song")["date"]
-    .min()
-    .reset_index()
-)
-release_dates.columns = ["Song", "Release Date"]
-release_dates["Release Date"] = pd.to_datetime(release_dates["Release Date"])
-
-today = pd.to_datetime("today")
-release_dates["days_since_release"] = (today - release_dates["Release Date"]).dt.days
-
-filtered_release_df = release_dates[release_dates["Song"].isin(selected_songs)]
-filtered_release_df = filtered_release_df.drop(columns=["Release Date"]).set_index("Song")
-filtered_release_df = filtered_release_df.sort_values(by='days_since_release', ascending=False)
-
 
 # For tab1, col3
-scatter_data = total_streams_per_song.merge(
-    release_dates[["Song", "days_since_release"]],
-    left_on="song",
-    right_on="Song",
-    how="left"
-).drop(columns=["Song"]) 
+scatter_data = song_summary.copy()
 
 plt.style.use('dark_background')
 colors = plt.cm.get_cmap("tab20", len(scatter_data))
 
 
 # For tab1 col4
-data_by_song['cumulative_streams'] = data_by_song.groupby('song')['streams'].cumsum() 
-
 def calculate_growth_rate(group, global_baseline):
     group = group.copy()
     group['avg_last_10_days'] = group['streams'].rolling(window=10, min_periods=1).mean()
@@ -151,11 +119,6 @@ with tab1:
         st.subheader("Total Streams & Days Since Release")
         st.dataframe(song_summary, hide_index=True, use_container_width=True, height=422)
         st.write(f"**Grand Total Streams**: {grand_total}")
-
- #   with col2:
- #       st.subheader("Days Since Release")
- #       filtered_release_df = filtered_release_df.rename(columns={'song': 'Song', 'days_since_release': 'Days'})
- #       st.dataframe(filtered_release_df, hide_index=False, use_container_width=True, height = 422)
 
     col3 = st.columns([1])[0]
 
