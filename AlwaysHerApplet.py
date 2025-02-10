@@ -64,34 +64,21 @@ total_streams_per_song = total_streams_per_song.sort_values(by='streams', ascend
 grand_total = total_streams_per_song['streams'].sum() 
 
 
-# For tab1 col4
-data_by_song['cumulative_streams'] = data_by_song.groupby('song')['streams'].cumsum() 
 
-def calculate_growth_rate(group, global_baseline):
-    group = group.copy()
-    group['avg_last_10_days'] = group['streams'].rolling(window=10, min_periods=1).mean()
-    group = group.merge(global_baseline, on='date', how='left', suffixes=('', '_global'))
+song_summary = (data_by_song[data_by_song["streams"] > 0]
+                .groupby('song', as_index=False)
+                .agg(Streams=('streams', 'sum'),
+                     Release_Date=('date', 'min')))
 
-    # Calculate the growth rate between the two averages
-    group['growth_rate'] = ((group['avg_last_10_days'] - group['avg_prior_10_days']) / group['avg_prior_10_days']) * 100
-    return group
+song_summary["Release_Date"] = pd.to_datetime(song_summary["Release_Date"])
+today = pd.to_datetime("today")
+song_summary["Days"] = (today - song_summary["Release_Date"]).dt.days
 
-global_baseline = (
-    data_by_song.groupby('date')['streams']
-    .mean()
-    .rolling(window=10, min_periods=1)
-    .mean()
-    .shift(10)  # Shift AFTER rolling
-    .reset_index(name='avg_prior_10_days')
-)
+song_summary = song_summary.drop(columns=["Release_Date"])
 
-data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate, global_baseline)
+song_summary = song_summary.sort_values(by='Streams', ascending=False)
 
-growth_rate_per_song = (data_by_song
-                        .dropna(subset=['growth_rate'])  # Remove NaN values
-                        .groupby('song', as_index=False)
-                        .agg({'growth_rate': 'last'})  # Take last non-null value
-                        .sort_values(by='growth_rate', ascending=False))
+grand_total = song_summary["Streams"].sum()
 
 
 # For tab1, col2
@@ -124,23 +111,51 @@ plt.style.use('dark_background')
 colors = plt.cm.get_cmap("tab20", len(scatter_data))
 
 
+# For tab1 col4
+data_by_song['cumulative_streams'] = data_by_song.groupby('song')['streams'].cumsum() 
+
+def calculate_growth_rate(group, global_baseline):
+    group = group.copy()
+    group['avg_last_10_days'] = group['streams'].rolling(window=10, min_periods=1).mean()
+    group = group.merge(global_baseline, on='date', how='left', suffixes=('', '_global'))
+
+    # Calculate the growth rate between the two averages
+    group['growth_rate'] = ((group['avg_last_10_days'] - group['avg_prior_10_days']) / group['avg_prior_10_days']) * 100
+    return group
+
+global_baseline = (
+    data_by_song.groupby('date')['streams']
+    .mean()
+    .rolling(window=10, min_periods=1)
+    .mean()
+    .shift(10)  # Shift AFTER rolling
+    .reset_index(name='avg_prior_10_days')
+)
+
+data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate, global_baseline)
+
+growth_rate_per_song = (data_by_song
+                        .dropna(subset=['growth_rate'])  # Remove NaN values
+                        .groupby('song', as_index=False)
+                        .agg({'growth_rate': 'last'})  # Take last non-null value
+                        .sort_values(by='growth_rate', ascending=False))
+
 
 tab1, tab2 = st.tabs(['General Stats', 'Cumulative Weekly Streams'])
 
 with tab1:
 
-    col1, col2 = st.columns([1, 1])
+    col1 = st.columns([1])[0]
 
     with col1:
-        st.subheader("Total Streams")
-        total_streams_per_song = total_streams_per_song.rename(columns={'song': 'Song', 'streams': 'Streams'})
-        st.dataframe(total_streams_per_song, hide_index=True, use_container_width=True, height = 422)
+        st.subheader("Total Streams & Days Since Release")
+        st.dataframe(song_summary, hide_index=True, use_container_width=True, height=422)
         st.write(f"**Grand Total Streams**: {grand_total}")
 
-    with col2:
-        st.subheader("Days Since Release")
-        filtered_release_df = filtered_release_df.rename(columns={'song': 'Song', 'days_since_release': 'Days'})
-        st.dataframe(filtered_release_df, hide_index=False, use_container_width=True, height = 422)
+ #   with col2:
+ #       st.subheader("Days Since Release")
+ #       filtered_release_df = filtered_release_df.rename(columns={'song': 'Song', 'days_since_release': 'Days'})
+ #       st.dataframe(filtered_release_df, hide_index=False, use_container_width=True, height = 422)
 
     col3 = st.columns([1])[0]
 
