@@ -123,15 +123,15 @@ with tab1:
     col3 = st.columns([1])[0]
 
     with col3:
-        st.subheader("Days Since Release vs. Total Streams")
+        st.subheader("Streams vs. Days Since Release")
         fig, ax = plt.subplots()
 
-        for idx, (song, days, streams) in enumerate(zip(scatter_data["song"], scatter_data["Days"], scatter_data["streams"])):
+        for idx, (song, days, streams) in enumerate(zip(scatter_data["song"], scatter_data["Days"], scatter_data["Streams"])):
             ax.scatter(days, streams, color=colors(idx), label=song, s=15, alpha=0.8)  
 
         # Trendline Calculation
         x = scatter_data["Days"]
-        y = scatter_data["streams"]
+        y = scatter_data["Streams"]
         
         if len(x) > 1:
             coeffs = np.polyfit(x, y, deg=1)
