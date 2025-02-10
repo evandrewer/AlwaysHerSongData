@@ -126,11 +126,11 @@ with tab1:
         st.subheader("Days Since Release vs. Total Streams")
         fig, ax = plt.subplots()
 
-        for idx, (song, days, streams) in enumerate(zip(scatter_data["song"], scatter_data["days_since_release"], scatter_data["streams"])):
+        for idx, (song, days, streams) in enumerate(zip(scatter_data["song"], scatter_data["Days"], scatter_data["streams"])):
             ax.scatter(days, streams, color=colors(idx), label=song, s=15, alpha=0.8)  
 
         # Trendline Calculation
-        x = scatter_data["days_since_release"]
+        x = scatter_data["Days"]
         y = scatter_data["streams"]
         
         if len(x) > 1:
