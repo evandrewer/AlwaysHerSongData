@@ -68,6 +68,8 @@ song_summary["Days"] = (today - song_summary["Release_Date"]).dt.days
 
 song_summary = song_summary.drop(columns=["Release_Date"])
 
+song_summary["streams_per_day"] = song_summary["Streams"] / song_summary["Days"]
+
 song_summary = song_summary.sort_values(by='Streams', ascending=False)
 
 grand_total = song_summary["Streams"].sum()
@@ -117,13 +119,14 @@ with tab1:
 
     with col1:
         st.subheader("Total Streams & Days Since Release")
+        song_summary = song_summary.rename(columns={'song': 'Song', 'Days': 'Days Since Release', 'streams_per_day': 'Streams Per Day' })
         st.dataframe(song_summary, hide_index=True, use_container_width=True, height=422)
         st.write(f"**Grand Total Streams**: {grand_total}")
 
     col3 = st.columns([1])[0]
 
     with col3:
-        st.subheader("Streams vs. Days Since Release")
+        st.subheader("Days Since Release vs. Total Streams")
         fig, ax = plt.subplots()
 
         for idx, (song, days, streams) in enumerate(zip(scatter_data["song"], scatter_data["Days"], scatter_data["Streams"])):
