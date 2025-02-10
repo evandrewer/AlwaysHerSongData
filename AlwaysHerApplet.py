@@ -120,13 +120,13 @@ with tab1:
     with col1:
         st.subheader("Total Streams & Days Since Release")
         song_summary = song_summary.rename(columns={'song': 'Song', 'Days': 'Days Since Release', 'streams_per_day': 'Streams Per Day' })
-        st.dataframe(song_summary, hide_index=True, use_container_width=True, height=422)
+        st.data_editor(song_summary, hide_index=True, use_container_width=True, height=422)
         st.write(f"**Grand Total Streams**: {grand_total}")
 
     col3 = st.columns([1])[0]
 
     with col3:
-        st.subheader("Days Since Release vs. Total Streams")
+        st.subheader("Days Since Release vs. Streams")
         fig, ax = plt.subplots()
 
         for idx, (song, days, streams) in enumerate(zip(scatter_data["song"], scatter_data["Days"], scatter_data["Streams"])):
