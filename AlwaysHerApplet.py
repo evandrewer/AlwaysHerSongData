@@ -75,15 +75,14 @@ song_summary = song_summary.sort_values(by='Streams', ascending=False)
 grand_total = song_summary["Streams"].sum()
 
 
-
-# For tab1, col3
+# For tab1, col2
 scatter_data = song_summary.copy()
 
 plt.style.use('dark_background')
 colors = plt.cm.get_cmap("tab20", len(scatter_data))
 
 
-# For tab1 col4
+# For tab1 col3
 def calculate_growth_rate(group, global_baseline):
     group = group.copy()
     group['avg_last_10_days'] = group['streams'].rolling(window=10, min_periods=1).mean()
@@ -123,9 +122,9 @@ with tab1:
         st.data_editor(song_summary, hide_index=True, use_container_width=True, height=422)
         st.write(f"**Grand Total Streams**: {grand_total}")
 
-    col3 = st.columns([1])[0]
+    col2 = st.columns([1])[0]
 
-    with col3:
+    with col2:
         st.subheader("Days Since Release vs. Streams")
         fig, ax = plt.subplots()
 
@@ -150,9 +149,31 @@ with tab1:
 
         st.pyplot(fig)
 
-    col4 = st.columns([1])[0]
+    col3 = st.columns([1])[0]
 
-    with col4:
+    with col3:
         st.subheader("10-day Growth Rate")
         growth_rate_per_song = growth_rate_per_song.rename(columns={'song': 'Song', 'growth_rate': 'Growth Rate %'})
         st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 423)
+
+        with st.expander("See explanation"):
+            st.write("""
+                The 10-day growth rate is calculated by taking the average streams of a given song for 
+                the past 10 days and comparing it with the average of ALL songs for the 10 days prior
+                to that. For example, if a song has a 10-day growth rate of 15%, that means it was streamed
+                about 15% more than the average song in the 10 day period before.
+                    """)
+
+
+
+    with tab2:
+
+        st.subheader("Average Daily Streams per Song")
+
+        avg_daily_streams = (
+        song_data.groupby("date")["streams"]
+        .mean()
+        .reset_index()
+        )
+
+        st.line_chart(avg_daily_streams.set_index("date"))
