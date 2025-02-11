@@ -109,8 +109,7 @@ with tab1:
     with col1:
         st.subheader("Total Streams & Days Since Release")
         song_summary = song_summary.rename(columns={'song': 'Song', 'Days': 'Days Since Release', 'streams_per_day': 'Streams Per Day' })
-        song_summary_col1 = song_summary
-        song_summary_col1 = song_summary_col1.drop('Release_Date')
+        song_summary_col1 = song_summary.drop(columns='Release_Date')
         st.data_editor(song_summary_col1, hide_index=True, use_container_width=True, height=422)
         st.write(f"**Grand Total Streams**: {grand_total}")
 
@@ -181,7 +180,7 @@ with tab1:
                             .reset_index()
                             .rename(columns={"Daily Streams": "Weekly Streams"}))
 
-        # Determine which data to plot
+
         if view_option == "Weekly Average Streams":
             plot_data, y_column = weekly_avg_streams, "Weekly Streams"
         else:
