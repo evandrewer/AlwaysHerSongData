@@ -161,22 +161,16 @@ with tab1:
     with tab2:
 
         st.subheader("Average Daily Streams per Song")
+        view_option = st.radio("Select View", ["Daily Average Streams", "Weekly Average Streams"])
 
-        avg_daily_streams = (
-        song_data.groupby("date")["streams"]
-        .mean()
-        .reset_index()
-        )
-        # Plot using Matplotlib
-        fig, ax = plt.subplots(figsize=(10, 5))
-        ax.plot(avg_daily_streams["date"], avg_daily_streams["streams"], marker="o", linestyle="-", color="green")
+        earliest_release_date = song_summary["Release Date"].min()
+        filtered_data = data_by_song[data_by_song["date"] >= earliest_release_date]
 
-        # Formatting
-        ax.set_xlabel("Date")
-        ax.set_ylabel("Avg Streams per Song")
-        ax.set_title("Average Daily Streams per Song Over Time")
-        ax.grid(True)
-        plt.xticks(rotation=45)  # Rotate x-axis labels
+        if view_option == "Weekly Average Streams":
+            filtered_data = (filtered_data
+                            .groupby(pd.Grouper(key="date", freq="W"))["streams"]
+                            .mean()
+                            .reset_index())
 
-        # Display in Streamlit
-        st.pyplot(fig)
+        filtered_data = filtered_data.rename(columns={"streams": view_option})
+        st.line_chart(filtered_data.set_index("date"), use_container_width=True, color="#1DB954")
