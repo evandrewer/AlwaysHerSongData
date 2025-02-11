@@ -162,29 +162,31 @@ with tab1:
         st.subheader("Average Daily Streams per Song")
         view_option = st.radio("Select View", ["Daily Average Streams", "Weekly Average Streams"])
 
-        # Get the earliest release date
         earliest_release_date = song_summary["Release_Date"].min()
         filtered_data = data_by_song[data_by_song["date"] >= earliest_release_date].copy()
 
-        # Compute the daily average streams across all songs
         daily_avg_streams = (filtered_data
                             .groupby("date")["streams"]
                             .mean()
                             .reset_index()
                             .rename(columns={"streams": "Daily Streams"}))
 
-        # Compute the weekly sum of daily averages (instead of mean)
         weekly_avg_streams = (daily_avg_streams
                             .groupby(pd.Grouper(key="date", freq="W"))["Daily Streams"]
                             .sum()
                             .reset_index()
                             .rename(columns={"Daily Streams": "Weekly Streams"}))
 
-
         if view_option == "Weekly Average Streams":
             plot_data, y_column = weekly_avg_streams, "Weekly Streams"
         else:
             plot_data, y_column = daily_avg_streams, "Daily Streams"
 
-        # Display the line chart
-        st.line_chart(plot_data.set_index("date")[[y_column]], use_container_width=True, color="#1DB954")
+        total_songs = (filtered_data.groupby(pd.Grouper(key="date", freq="W"))["song"]
+                    .nunique()
+                    .reset_index()
+                    .rename(columns={"song": "Total Songs"}))
+
+        merged_data = filtered_data.merge(total_songs, on="date", how="left")
+
+        st.line_chart(merged_data.set_index("date")[["Weekly Streams", "Total Songs"]], use_container_width=True, color="#1DB954")
