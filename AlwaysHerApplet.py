@@ -109,6 +109,7 @@ with tab1:
     with col1:
         st.subheader("Total Streams & Days Since Release")
         song_summary = song_summary.rename(columns={'song': 'Song', 'Days': 'Days Since Release', 'streams_per_day': 'Streams Per Day' })
+        song_summary = song_summary.drop('Release_Date')
         st.data_editor(song_summary, hide_index=True, use_container_width=True, height=422)
         st.write(f"**Grand Total Streams**: {grand_total}")
 
@@ -161,14 +162,18 @@ with tab1:
         st.subheader("Average Daily Streams per Song")
         view_option = st.radio("Select View", ["Daily Average Streams", "Weekly Average Streams"])
 
-        earliest_release_date = song_summary["Release_Date"].min()
-        filtered_data = data_by_song[data_by_song["date"] >= earliest_release_date]
+        earliest_release_date = song_summary["Release Date"].min()
+        filtered_data = data_by_song[data_by_song["date"] >= earliest_release_date].copy()
 
         if view_option == "Weekly Average Streams":
             filtered_data = (filtered_data
                             .groupby(pd.Grouper(key="date", freq="W"))["streams"]
                             .mean()
-                            .reset_index())
+                            .reset_index()
+                            .rename(columns={"streams": "Weekly Streams"}))
+            y_column = "Weekly Streams"
+        else:
+            filtered_data = filtered_data.rename(columns={"streams": "Daily Streams"})
+            y_column = "Daily Streams"
 
-        filtered_data = filtered_data.rename(columns={"streams": view_option})
-        st.line_chart(filtered_data.set_index("date"), use_container_width=True, color="#1DB954")
+        st.line_chart(filtered_data.set_index("date")[[y_column]], use_container_width=True, color="#1DB954")
