@@ -198,11 +198,15 @@ with tab1:
             plot_data = daily_avg_streams
             y_column = "Daily Streams"
 
-        plot_data = plot_data.reset_index()
-        # Create the line chart for the chosen streams
-        st.line_chart(plot_data.set_index("date")[[y_column]], use_container_width=True, color="#1DB954")
+        if 'date' not in plot_data.columns:
+            plot_data = plot_data.reset_index()
 
-        # Plot the cumulative song count by merging it with the same 'date' index
+        # Merge plot_data with cumulative_song_count on 'date'
         plot_data_cumulative = pd.merge(plot_data, cumulative_song_count, on="date", how="left")
-        st.line_chart(plot_data_cumulative.set_index("date")[["Cumulative_Song_Count"]], use_container_width=True, color=["#b55bf0"])
+
+        # Plot the cumulative song count line
+        st.line_chart(plot_data_cumulative.set_index("date")[["Cumulative_Song_Count"]], use_container_width=True, color="#FF5733")
+
+        # Plot the daily or weekly streams chart as before
+        st.line_chart(plot_data_cumulative.set_index("date")[[y_column]], use_container_width=True, color="#1DB954")
 
