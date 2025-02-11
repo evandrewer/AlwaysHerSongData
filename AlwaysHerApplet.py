@@ -84,43 +84,20 @@ colors = plt.cm.get_cmap("tab20", len(scatter_data))
 
 # For tab1 col3
 
-#def calculate_growth_rate(group, global_baseline):
-#    group = group.copy()
-#    group['avg_last_10_days'] = group['streams'].rolling(window=10, min_periods=1).mean()
-#    group = group.merge(global_baseline, on='date', how='left', suffixes=('', '_global'))
-
-#    # Calculate the growth rate between the two averages
-#    group['growth_rate'] = ((group['avg_last_10_days'] - group['avg_prior_10_days']) / group['avg_prior_10_days']) * 100
-#    return group
-
-#global_baseline = (
-#    data_by_song.groupby('date')['streams']
-#    .mean()
-#    .mean()
-#    .shift(10)  # Shift AFTER rolling
-#    .reset_index(name='avg_prior_10_days')
-#)
-
-#data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate, global_baseline)
-
-#growth_rate_per_song = (data_by_song
-#                        .dropna(subset=['growth_rate'])  # Remove NaN values
-#                        .groupby('song', as_index=False)
-#                        .agg({'growth_rate': 'last'})  # Take last non-null value
-#                        .sort_values(by='growth_rate', ascending=False))
-
-
 def calculate_growth_rate(group):
-    group['avg_last_10_days'] = group['Streams'].rolling(window=10, min_periods=1).mean()
-    group['avg_prior_10_days'] = group['Streams'].shift(10).rolling(window=10, min_periods=1).mean()
+    group['avg_last_10_days'] = group['streams'].rolling(window=10, min_periods=1).mean()
+    group['avg_prior_10_days'] = group['streams'].shift(10).rolling(window=10, min_periods=1).mean()
     
     group['growth_rate'] = ((group['avg_last_10_days'] - group['avg_prior_10_days']) / group['avg_prior_10_days']) * 100
+
     return group
 
-data_by_song['moving_growth_rate'] = data_by_song.groupby('song')['Streams'].apply(calculate_growth_rate)
-growth_rate_per_song = (data_by_song.groupby('song', as_index=False)
-                        .agg({'moving_growth_rate': 'last'}))
-growth_rate_per_song = growth_rate_per_song.sort_values(by='moving_growth_rate', ascending=False)
+data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate)
+
+growth_rate_per_song = (data_by_song.dropna(subset=['growth_rate'])  # Remove NaN values
+                        .groupby('song', as_index=False)
+                        .agg({'growth_rate': 'last'})  # Take last non-null value
+                        .sort_values(by='growth_rate', ascending=False))
 
 
 
