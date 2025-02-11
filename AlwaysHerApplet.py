@@ -162,31 +162,29 @@ with tab1:
         st.subheader("Average Daily Streams per Song")
         view_option = st.radio("Select View", ["Daily Average Streams", "Weekly Average Streams"])
 
-        # Find the earliest release date
-        earliest_release_date = song_summary["Release Date"].min()
-
-        # Filter data to include only dates on or after the first song release
+        # Get the earliest release date
+        earliest_release_date = song_summary["Release_Date"].min()
         filtered_data = data_by_song[data_by_song["date"] >= earliest_release_date].copy()
 
-        # Compute daily average streams across all songs
+        # Compute the daily average streams across all songs
         daily_avg_streams = (filtered_data
                             .groupby("date")["streams"]
                             .mean()
                             .reset_index()
-                            .rename(columns={"streams": "Daily Avg Streams"}))
+                            .rename(columns={"streams": "Daily Streams"}))
 
-        # Compute weekly average streams by binning daily averages
+        # Compute the weekly average by taking the mean of daily averages
         weekly_avg_streams = (daily_avg_streams
-                            .groupby(pd.Grouper(key="date", freq="W"))["Daily Avg Streams"]
+                            .groupby(pd.Grouper(key="date", freq="W"))["Daily Streams"]
                             .mean()
                             .reset_index()
-                            .rename(columns={"Daily Avg Streams": "Weekly Avg Streams"}))
+                            .rename(columns={"Daily Streams": "Weekly Streams"}))
 
-        # Determine which data to plot based on user selection
+        # Determine which data to plot
         if view_option == "Weekly Average Streams":
-            plot_data, y_column = weekly_avg_streams, "Weekly Avg Streams"
+            plot_data, y_column = weekly_avg_streams, "Weekly Streams"
         else:
-            plot_data, y_column = daily_avg_streams, "Daily Avg Streams"
+            plot_data, y_column = daily_avg_streams, "Daily Streams"
 
-        # Display the line chart in Streamlit
+        # Display the line chart
         st.line_chart(plot_data.set_index("date")[[y_column]], use_container_width=True, color="#1DB954")
