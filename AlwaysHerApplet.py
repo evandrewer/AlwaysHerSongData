@@ -167,5 +167,16 @@ with tab1:
         .mean()
         .reset_index()
         )
+        # Plot using Matplotlib
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(avg_daily_streams["date"], avg_daily_streams["streams"], marker="o", linestyle="-", color="green")
 
-        st.line_chart(avg_daily_streams.set_index("date"))
+        # Formatting
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Avg Streams per Song")
+        ax.set_title("Average Daily Streams per Song Over Time")
+        ax.grid(True)
+        plt.xticks(rotation=45)  # Rotate x-axis labels
+
+        # Display in Streamlit
+        st.pyplot(fig)
