@@ -175,15 +175,30 @@ with tab1:
                             .rename(columns={"streams": "Weekly Streams"}))
             y_column = "Weekly Streams"
         else:
-            filtered_data = filtered_data.rename(columns={"streams": "Daily Streams"})
-            y_column = "Daily Streams"
+            # For Daily Average Streams, calculate the sum of streams per day and divide by number of songs on each day
+            daily_avg_streams = (filtered_data
+                                .groupby(pd.Grouper(key="date", freq="D"))["streams"]
+                                .sum()
+                                .reset_index(name="Total Daily Streams"))
+
+            # Count number of songs that have streams on each day
+            daily_song_count = (filtered_data[filtered_data["streams"] > 0]
+                                .groupby(pd.Grouper(key="date", freq="D"))
+                                .size()
+                                .reset_index(name="Song Count"))
+            
+            # Merge the two datasets and calculate the daily average streams
+            daily_avg_streams = daily_avg_streams.merge(daily_song_count, on="date", how="left")
+            daily_avg_streams["Daily Average Streams"] = daily_avg_streams["Total Daily Streams"] / daily_avg_streams["Song Count"]
+            
+            y_column = "Daily Average Streams"
 
         # Compute the total number of songs released up until each date
         total_songs_released = song_summary.groupby(pd.Grouper(key="Release_Date", freq="D"))["Release_Date"].count().reset_index(name="Total Songs")
         total_songs_released = total_songs_released.sort_values("Release_Date")
 
         # Merge the total number of songs released with the filtered data
-        merged_data = filtered_data.merge(total_songs_released, left_on="date", right_on="Release_Date", how="left")
+        merged_data = daily_avg_streams.merge(total_songs_released, left_on="date", right_on="Release_Date", how="left")
 
         # Plot both lines: average streams and total songs
-        st.line_chart(merged_data.set_index("date")[[y_column, "Total Songs"]], use_container_width=True, color=["#B55BF0", "#1DB954"])
+        st.line_chart(merged_data.set_index("date")[["Total Songs", y_column]], use_container_width=True, color=["#B55BF0", "#1DB954"])
