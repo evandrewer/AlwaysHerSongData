@@ -66,8 +66,6 @@ song_summary["Release_Date"] = pd.to_datetime(song_summary["Release_Date"])
 today = pd.to_datetime("today")
 song_summary["Days"] = (today - song_summary["Release_Date"]).dt.days
 
-song_summary = song_summary.drop(columns=["Release_Date"])
-
 song_summary["streams_per_day"] = song_summary["Streams"] / song_summary["Days"]
 
 song_summary = song_summary.sort_values(by='Streams', ascending=False)
@@ -163,7 +161,7 @@ with tab1:
         st.subheader("Average Daily Streams per Song")
         view_option = st.radio("Select View", ["Daily Average Streams", "Weekly Average Streams"])
 
-        earliest_release_date = song_summary["Release Date"].min()
+        earliest_release_date = song_summary["Release_Date"].min()
         filtered_data = data_by_song[data_by_song["date"] >= earliest_release_date]
 
         if view_option == "Weekly Average Streams":
