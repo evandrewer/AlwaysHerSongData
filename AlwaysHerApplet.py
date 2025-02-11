@@ -162,29 +162,28 @@ with tab1:
         st.subheader("Average Daily Streams per Song")
         view_option = st.radio("Select View", ["Daily Average Streams", "Weekly Average Streams"])
 
-        # Get the earliest release date
+        # Filter data to only include songs released after the earliest release date
         earliest_release_date = song_summary["Release_Date"].min()
         filtered_data = data_by_song[data_by_song["date"] >= earliest_release_date].copy()
 
-        # Compute the daily average streams across all songs
-        daily_avg_streams = (filtered_data
-                            .groupby("date")["streams"]
+        # Calculate Daily or Weekly Average Streams
+        if view_option == "Weekly Average Streams":
+            filtered_data = (filtered_data
+                            .groupby(pd.Grouper(key="date", freq="W"))["streams"]
                             .mean()
                             .reset_index()
-                            .rename(columns={"streams": "Daily Streams"}))
-
-        # Compute the weekly sum of daily averages (instead of mean)
-        weekly_avg_streams = (daily_avg_streams
-                            .groupby(pd.Grouper(key="date", freq="W"))["Daily Streams"]
-                            .sum()
-                            .reset_index()
-                            .rename(columns={"Daily Streams": "Weekly Streams"}))
-
-
-        if view_option == "Weekly Average Streams":
-            plot_data, y_column = weekly_avg_streams, "Weekly Streams"
+                            .rename(columns={"streams": "Weekly Streams"}))
+            y_column = "Weekly Streams"
         else:
-            plot_data, y_column = daily_avg_streams, "Daily Streams"
+            filtered_data = filtered_data.rename(columns={"streams": "Daily Streams"})
+            y_column = "Daily Streams"
 
-        # Display the line chart
-        st.line_chart(plot_data.set_index("date")[[y_column]], use_container_width=True, color="#1DB954")
+        # Compute the total number of songs released up until each date
+        total_songs_released = song_summary.groupby(pd.Grouper(key="Release_Date", freq="D"))["Release_Date"].count().reset_index(name="Total Songs")
+        total_songs_released = total_songs_released.sort_values("Release_Date")
+
+        # Merge the total number of songs released with the filtered data
+        merged_data = filtered_data.merge(total_songs_released, left_on="date", right_on="Release_Date", how="left")
+
+        # Plot both lines: average streams and total songs
+        st.line_chart(merged_data.set_index("date")[["Weekly Streams", "Total Songs"]], use_container_width=True, color="#1DB954")
