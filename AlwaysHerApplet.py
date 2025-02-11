@@ -173,10 +173,10 @@ with tab1:
                             .reset_index()
                             .rename(columns={"streams": "Daily Streams"}))
 
-        # Compute the weekly average by taking the mean of daily averages
+        # Compute the weekly sum of daily averages (instead of mean)
         weekly_avg_streams = (daily_avg_streams
                             .groupby(pd.Grouper(key="date", freq="W"))["Daily Streams"]
-                            .mean()
+                            .sum()
                             .reset_index()
                             .rename(columns={"Daily Streams": "Weekly Streams"}))
 
