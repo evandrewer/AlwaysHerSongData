@@ -109,8 +109,8 @@ with tab1:
     with col1:
         st.subheader("Total Streams & Days Since Release")
         song_summary = song_summary.rename(columns={'song': 'Song', 'Days': 'Days Since Release', 'streams_per_day': 'Streams Per Day' })
-        song_summary_col1 = song_summary.drop('Release_Date')
-        st.data_editor(song_summary_col1, hide_index=True, use_container_width=True, height=422)
+        #song_summary_col1 = song_summary.drop('Release_Date')
+        st.data_editor(song_summary, hide_index=True, use_container_width=True, height=422)
         st.write(f"**Grand Total Streams**: {grand_total}")
 
     col2 = st.columns([1])[0]
