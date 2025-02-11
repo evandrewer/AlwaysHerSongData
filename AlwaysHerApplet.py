@@ -111,13 +111,13 @@ colors = plt.cm.get_cmap("tab20", len(scatter_data))
 
 
 def calculate_growth_rate(group):
-    group['avg_last_10_days'] = group['streams'].rolling(window=10, min_periods=1).mean()
-    group['avg_prior_10_days'] = group['streams'].shift(10).rolling(window=10, min_periods=1).mean()
+    group['avg_last_10_days'] = group['Streams'].rolling(window=10, min_periods=1).mean()
+    group['avg_prior_10_days'] = group['Streams'].shift(10).rolling(window=10, min_periods=1).mean()
     
     group['growth_rate'] = ((group['avg_last_10_days'] - group['avg_prior_10_days']) / group['avg_prior_10_days']) * 100
     return group
 
-data_by_song['moving_growth_rate'] = data_by_song.groupby('song')['streams'].apply(calculate_growth_rate)
+data_by_song['moving_growth_rate'] = data_by_song.groupby('song')['Streams'].apply(calculate_growth_rate)
 growth_rate_per_song = (data_by_song.groupby('song', as_index=False)
                         .agg({'moving_growth_rate': 'last'}))
 growth_rate_per_song = growth_rate_per_song.sort_values(by='moving_growth_rate', ascending=False)
