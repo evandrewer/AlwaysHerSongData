@@ -162,7 +162,7 @@ with tab1:
         st.subheader("Average Daily Streams per Song")
         view_option = st.radio("Select View", ["Daily Average Streams", "Weekly Average Streams"])
 
-        earliest_release_date = song_summary["Release Date"].min()
+        earliest_release_date = song_summary["Release_Date"].min()
         filtered_data = data_by_song[data_by_song["date"] >= earliest_release_date].copy()
 
         if view_option == "Weekly Average Streams":
