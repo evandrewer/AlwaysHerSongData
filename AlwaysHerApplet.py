@@ -186,4 +186,4 @@ with tab1:
         merged_data = filtered_data.merge(total_songs_released, left_on="date", right_on="Release_Date", how="left")
 
         # Plot both lines: average streams and total songs
-        st.line_chart(merged_data.set_index("date")[["Weekly Streams", "Total Songs"]], use_container_width=True, color="#1DB954")
+        st.line_chart(merged_data.set_index("date")[["Weekly Streams", "Total Songs"]], use_container_width=True, color=["#1DB954", "#B55BF0"])
