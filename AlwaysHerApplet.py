@@ -144,16 +144,16 @@ with tab1:
     col3 = st.columns([1])[0]
 
     with col3:
-        st.subheader("10-day Growth Rate")
+        st.subheader("10-day Moving Growth Rate")
         growth_rate_per_song = growth_rate_per_song.rename(columns={'song': 'Song', 'growth_rate': 'Growth Rate %'})
         st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 423)
 
         with st.expander("See explanation"):
             st.write("""
-                The 10-day growth rate is calculated by taking the average streams of a given song for 
-                the past 10 days and comparing it with the average of ALL songs for the 10 days prior
+                The 10-day moving growth rate is calculated by taking the average streams of a given song for 
+                the past 10 days and comparing to its own average streams for the 10 days prior
                 to that. For example, if a song has a 10-day growth rate of 15%, that means it was streamed
-                about 15% more than the average song in the 10 day period before.
+                about 15% more than in the 10 day period before.
                     """)
 
 
