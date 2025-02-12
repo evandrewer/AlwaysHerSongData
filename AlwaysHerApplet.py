@@ -210,10 +210,28 @@ with tab1:
             stream_distribution = stream_distribution[stream_distribution["streams"] > 0]
 
             if not stream_distribution.empty:
+                # Custom label function to show both percentage and stream count
+                def autopct_format(pct, all_vals):
+                    total = sum(all_vals)
+                    absolute = int(round(pct * total / 100.0))  # Convert percentage to stream count
+                    return f"{pct:.1f}%\n({absolute} streams)"
+
                 # Create a pie chart
                 fig, ax = plt.subplots()
-                ax.pie(stream_distribution["streams"], labels=stream_distribution["song"], autopct='%1.1f%%', 
-                    startangle=90, colors=plt.cm.tab20.colors)
+                wedges, texts, autotexts = ax.pie(
+                    stream_distribution["streams"], 
+                    labels=stream_distribution["song"], 
+                    autopct=lambda pct: autopct_format(pct, stream_distribution["streams"]),
+                    startangle=90, 
+                    colors=plt.cm.tab20.colors
+                )
+
+                # Style the text
+                for text in texts:
+                    text.set_fontsize(10)
+                    text.set_fontweight("bold")
+                for autotext in autotexts:
+                    autotext.set_fontsize(9)
 
                 ax.axis("equal")  # Equal aspect ratio ensures the pie chart is circular
 
