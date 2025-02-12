@@ -189,24 +189,37 @@ with tab1:
         st.line_chart(plot_data.set_index("date")[[y_column]], use_container_width=True, color="#1DB954")
 
 
-        # --- PIE CHART FOR STREAM DISTRIBUTION ---
+    # --- PIE CHART FOR STREAM DISTRIBUTION ---
 
         st.subheader("Song Stream Distribution on a Specific Day")
+
+        # Date selector
         selected_date = st.date_input("Select a date", min_value=earliest_release_date, max_value=data_by_song["date"].max())
 
+        # Filter data for selected date
         selected_day_data = data_by_song[data_by_song["date"] == pd.to_datetime(selected_date)]
 
         if not selected_day_data.empty:
+            # Compute total streams per song for that date
             stream_distribution = (selected_day_data
                                     .groupby("song")["streams"]
                                     .sum()
                                     .reset_index())
-            
-            fig, ax = plt.subplots()
-            ax.pie(stream_distribution["streams"], labels=stream_distribution["song"], autopct='%1.1f%%', startangle=90, colors=plt.cm.tab20.colors)
-            ax.axis("equal")  # Equal aspect ratio ensures the pie chart is circular
 
-            st.pyplot(fig)
+            # Remove songs with 0 streams
+            stream_distribution = stream_distribution[stream_distribution["streams"] > 0]
+
+            if not stream_distribution.empty:
+                # Create a pie chart
+                fig, ax = plt.subplots()
+                ax.pie(stream_distribution["streams"], labels=stream_distribution["song"], autopct='%1.1f%%', 
+                    startangle=90, colors=plt.cm.tab20.colors)
+
+                ax.axis("equal")  # Equal aspect ratio ensures the pie chart is circular
+
+                st.pyplot(fig)
+            else:
+                st.write("No songs had streams on this date.")
         else:
             st.write("No stream data available for this date.")
 
