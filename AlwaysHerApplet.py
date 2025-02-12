@@ -202,6 +202,6 @@ with tab1:
         st.line_chart(plot_data.set_index("date")[[y_column]], use_container_width=True, color="#1DB954")
 
         # Plot the cumulative song count by merging it with the same 'date' index
-        plot_data_cumulative = pd.merge(plot_data, cumulative_song_count, on="date", how="left")
-        st.line_chart(plot_data_cumulative.set_index("date")[["Cumulative_Song_Count"]], use_container_width=True, color=["#b55bf0"])
+        #plot_data_cumulative = pd.merge(plot_data, cumulative_song_count, on="date", how="left")
+        #st.line_chart(plot_data_cumulative.set_index("date")[["Cumulative_Song_Count"]], use_container_width=True, color=["#b55bf0"])
 
