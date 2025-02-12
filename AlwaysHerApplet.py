@@ -217,7 +217,7 @@ with tab1:
                 def autopct_format(pct, all_vals):
                     total = sum(all_vals)
                     absolute = int(round(pct * total / 100.0))  # Convert percentage to stream count
-                    return f"{pct:.1f}%\n({absolute} streams)"
+                    return f"{pct:.1f}%\n({absolute})"
 
                 # Create a pie chart
                 fig, ax = plt.subplots()
