@@ -6,7 +6,7 @@ import numpy as np
 import streamlit as st
 
 @st.cache_data
-def songdata(show_spinner=True, ttl=16):
+def songdata(show_spinner=True, ttl=14):
     silhouette = pd.read_csv("Silhouette (The Halloween Song)-timeline.csv")
     itb = pd.read_csv("In the Beginning-timeline.csv")
     erberger = pd.read_csv("Airport Girl-timeline.csv")
