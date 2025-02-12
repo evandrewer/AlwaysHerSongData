@@ -100,7 +100,7 @@ growth_rate_per_song = (data_by_song.dropna(subset=['growth_rate'])  # Remove Na
 
 
 
-tab1, tab2 = st.tabs(['General Stats', 'Cumulative Weekly Streams'])
+tab1, tab2 = st.tabs(['General Stats', 'Stream Breakdowns'])
 
 with tab1:
 
@@ -187,4 +187,26 @@ with tab1:
 
         # Create the line chart for the chosen streams
         st.line_chart(plot_data.set_index("date")[[y_column]], use_container_width=True, color="#1DB954")
+
+
+        # --- PIE CHART FOR STREAM DISTRIBUTION ---
+
+        st.subheader("Song Stream Distribution on a Specific Day")
+        selected_date = st.date_input("Select a date", min_value=earliest_release_date, max_value=data_by_song["date"].max())
+
+        selected_day_data = data_by_song[data_by_song["date"] == pd.to_datetime(selected_date)]
+
+        if not selected_day_data.empty:
+            stream_distribution = (selected_day_data
+                                    .groupby("song")["streams"]
+                                    .sum()
+                                    .reset_index())
+            
+            fig, ax = plt.subplots()
+            ax.pie(stream_distribution["streams"], labels=stream_distribution["song"], autopct='%1.1f%%', startangle=90, colors=plt.cm.tab20.colors)
+            ax.axis("equal")  # Equal aspect ratio ensures the pie chart is circular
+
+            st.pyplot(fig)
+        else:
+            st.write("No stream data available for this date.")
 
