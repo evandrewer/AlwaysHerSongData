@@ -241,7 +241,7 @@ with tab1:
                 st.pyplot(fig)
 
                 # Display total stream count below the pie chart
-                st.markdown(f"**Total Streams on {selected_date}:** {total_streams:,}")
+                st.markdown(f"**Total Streams:** {total_streams:,}")
             else:
                 st.write("No songs had streams on this date.")
         else:
