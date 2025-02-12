@@ -162,19 +162,6 @@ with tab1:
         st.subheader("Average Daily Streams per Song")
         view_option = st.radio("Select View", ["Daily Average Streams", "Weekly Average Streams"])
 
-        # Song Count line code:
-        song_summary["Release_Date"] = pd.to_datetime(song_summary["Release_Date"])
-        song_summary = song_summary.sort_values(by="Release_Date")
-
-        # Initialize a new column for cumulative song count
-        song_summary["Cumulative_Song_Count"] = 0
-
-        # For each unique date, increment the song count
-        for date in song_summary["Release_Date"].unique():
-            song_summary.loc[song_summary["Release_Date"] <= date, "Cumulative_Song_Count"] += 1
-
-        cumulative_song_count = song_summary.groupby('Release_Date')['Cumulative_Song_Count'].max().reset_index()
-
         earliest_release_date = song_summary["Release_Date"].min()
         filtered_data = data_by_song[data_by_song["date"] >= earliest_release_date].copy()
 
@@ -200,8 +187,4 @@ with tab1:
 
         # Create the line chart for the chosen streams
         st.line_chart(plot_data.set_index("date")[[y_column]], use_container_width=True, color="#1DB954")
-
-        # Plot the cumulative song count by merging it with the same 'date' index
-        #plot_data_cumulative = pd.merge(plot_data, cumulative_song_count, on="date", how="left")
-        #st.line_chart(plot_data_cumulative.set_index("date")[["Cumulative_Song_Count"]], use_container_width=True, color=["#b55bf0"])
 
