@@ -209,12 +209,15 @@ with tab1:
             # Remove songs with 0 streams
             stream_distribution = stream_distribution[stream_distribution["streams"] > 0]
 
+            # Calculate the total streams for the selected day
+            total_streams = stream_distribution["streams"].sum()
+
             if not stream_distribution.empty:
                 # Custom label function to show both percentage and stream count
                 def autopct_format(pct, all_vals):
                     total = sum(all_vals)
                     absolute = int(round(pct * total / 100.0))  # Convert percentage to stream count
-                    return f"{pct:.1f}%\n({absolute})"
+                    return f"{pct:.1f}%\n({absolute} streams)"
 
                 # Create a pie chart
                 fig, ax = plt.subplots()
@@ -236,6 +239,9 @@ with tab1:
                 ax.axis("equal")  # Equal aspect ratio ensures the pie chart is circular
 
                 st.pyplot(fig)
+
+                # Display total stream count below the pie chart
+                st.markdown(f"**Total Streams on {selected_date}:** {total_streams:,}")
             else:
                 st.write("No songs had streams on this date.")
         else:
