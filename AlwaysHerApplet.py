@@ -269,7 +269,7 @@ with tab1:
             plt.bar(pivot_df.index, pivot_df[song], 
                     bottom=bottom, 
                     label=song,
-                    colors=plt.cm.tab20.colors,
+                    color=plt.cm.tab20.colors,
                     width=4.5)
 
             bottom += pivot_df[song]
