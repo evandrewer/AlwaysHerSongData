@@ -269,6 +269,7 @@ with tab1:
             plt.bar(pivot_df.index, pivot_df[song], 
                     bottom=bottom, 
                     label=song,
+                    color=plt.cm.get_cmap("tab20", len(scatter_data)),
                     width=4.5)
 
             bottom += pivot_df[song]
