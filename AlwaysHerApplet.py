@@ -261,11 +261,11 @@ with tab1:
             """
             filtered_dfs = []
             
-            for song, song_data in df.groupby('song'):
-                song_data = song_data.sort_values('week').reset_index(drop=True)
-                first_stream_week_idx = song_data.loc[song_data['streams'] > 0].index.min()
+            for song, song_datas in df.groupby('song'):
+                song_datas = song_datas.sort_values('week').reset_index(drop=True)
+                first_stream_week_idx = song_datas.loc[song_datas['streams'] > 0].index.min()
                 prior_week_idx = max(first_stream_week_idx - 1, 0)
-                filtered_song_data = song_data.loc[prior_week_idx:]
+                filtered_song_data = song_datas.loc[prior_week_idx:]
                 
                 filtered_dfs.append(filtered_song_data)
 
