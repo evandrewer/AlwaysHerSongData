@@ -263,24 +263,27 @@ with tab1:
 
         color_list = [colors(i) for i in range(colors.N)]
 
-        plt.figure(figsize=(12, 6))
+        fig, ax = plt.subplots(figsize=(12, 6))
 
         bottom = pd.Series([0] * len(pivot_df), index=pivot_df.index)
 
+        # Create the stacked bar chart
         for idx, song in enumerate(pivot_df.columns):
-            plt.bar(pivot_df.index, pivot_df[song], 
-                    bottom=bottom, 
-                    label=song,
-                    color=color_list,
-                    width=4.5)
-
+            ax.bar(pivot_df.index, pivot_df[song], 
+                bottom=bottom, 
+                label=song,
+                color=color_list[idx % len(color_list)],  # Ensure colors don't go out of range
+                width=4.5)
             bottom += pivot_df[song]
 
-        plt.title('Weekly Stream Counts (Stacked)', fontsize=16)
-        plt.xlabel('Week', fontsize=12)
-        plt.ylabel('Total Streams', fontsize=12)
-        plt.legend(title='Song', bbox_to_anchor=(1.05, 1), loc='upper left')
-        plt.grid(True)
+        # Formatting
+        ax.set_title('Weekly Stream Counts (Stacked)', fontsize=16)
+        ax.set_xlabel('Week', fontsize=12)
+        ax.set_ylabel('Total Streams', fontsize=12)
+        ax.legend(title='Song', bbox_to_anchor=(1.05, 1), loc='upper left')
+        ax.grid(True)
+        plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
         plt.tight_layout()
 
-        plt.show()
+        # Display the plot in Streamlit
+        st.pyplot(fig)
