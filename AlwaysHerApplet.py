@@ -249,3 +249,53 @@ with tab1:
                 st.write("No songs had streams on this date.")
         else:
             st.write("No stream data available for this date.")
+
+
+    # STACKED BAR CHART
+
+        st.subheader("Weekly Stream Counts Stacked Bar Graph")
+
+        def filter_zeros_before_release(df):
+            """
+            For each song, keep the week immediately before the release week and all subsequent weeks.
+            """
+            filtered_dfs = []
+            
+            for song, song_data in df.groupby('song'):
+                song_data = song_data.sort_values('week').reset_index(drop=True)
+                first_stream_week_idx = song_data.loc[song_data['streams'] > 0].index.min()
+                prior_week_idx = max(first_stream_week_idx - 1, 0)
+                filtered_song_data = song_data.loc[prior_week_idx:]
+                
+                filtered_dfs.append(filtered_song_data)
+
+            return pd.concat(filtered_dfs)
+
+        filtered_df2 = filter_zeros_before_release(data_by_song)
+
+        pivot_df = filtered_df2.pivot(index='week', columns='song', values='streams').fillna(0)
+
+        pivot_df = pivot_df.sort_index()
+
+
+        plt.figure(figsize=(12, 6))
+
+        bottom = pd.Series([0] * len(pivot_df), index=pivot_df.index)
+
+        for idx, song in enumerate(pivot_df.columns):
+            plt.bar(pivot_df.index, pivot_df[song], 
+                    bottom=bottom, 
+                    label=song,
+                    color=colors[idx % len(colors)],
+                    width=4.5)
+
+            bottom += pivot_df[song]
+
+        plt.title('Weekly Stream Counts (Stacked)', fontsize=16)
+        plt.xlabel('Week', fontsize=12)
+        plt.ylabel('Total Streams', fontsize=12)
+        plt.legend(title='Song', bbox_to_anchor=(1.05, 1), loc='upper left')
+        plt.grid(True)
+        plt.tight_layout()
+
+        plt.show()
