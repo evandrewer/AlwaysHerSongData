@@ -255,25 +255,12 @@ with tab1:
 
         st.subheader("Weekly Stream Counts Stacked Bar Graph")
 
-        def filter_zeros_before_release(df):
-            """
-            For each song, keep the week immediately before the release week and all subsequent weeks.
-            """
-            filtered_dfs = []
-            
-            for song, song_datas in df.groupby('song'):
-                song_datas = song_datas.sort_values('week').reset_index(drop=True)
-                first_stream_week_idx = song_datas.loc[song_datas['streams'] > 0].index.min()
-                prior_week_idx = max(first_stream_week_idx - 1, 0)
-                filtered_song_data = song_datas.loc[prior_week_idx:]
-                
-                filtered_dfs.append(filtered_song_data)
 
-            return pd.concat(filtered_dfs)
+        data_by_song['week'] = data_by_song['date'].dt.to_period('W').apply(lambda r: r.start_time)
 
-        filtered_df2 = filter_zeros_before_release(data_by_song)
+        weekly_df = data_by_song.groupby(['song', 'week'])['streams'].sum().reset_index()
 
-        pivot_df = filtered_df2.pivot(index='week', columns='song', values='streams').fillna(0)
+        pivot_df = weekly_df.pivot(index='week', columns='song', values='streams').fillna(0)
 
         pivot_df = pivot_df.sort_index()
 
