@@ -261,6 +261,8 @@ with tab1:
         pivot_df = pivot_df.sort_index()
 
 
+        color_list = [colors(i) for i in range(colors.N)]
+
         plt.figure(figsize=(12, 6))
 
         bottom = pd.Series([0] * len(pivot_df), index=pivot_df.index)
@@ -269,7 +271,7 @@ with tab1:
             plt.bar(pivot_df.index, pivot_df[song], 
                     bottom=bottom, 
                     label=song,
-                    color=plt.cm.tab20.colors,
+                    color=color_list,
                     width=4.5)
 
             bottom += pivot_df[song]
