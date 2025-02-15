@@ -59,6 +59,16 @@ selected_songs = st.sidebar.multiselect(
 data_by_song = song_data[song_data['song'].isin(selected_songs)]
 
 
+
+# Color dictionary
+num_songs = 11 
+tab20_colors = plt.cm.get_cmap("tab20", num_songs)
+
+song_list = list(data_by_song.columns)
+color_dict = {song: tab20_colors(i) for i, song in enumerate(song_list)}
+
+
+
 # For tab1 col1
 song_summary = (data_by_song[data_by_song["streams"] > 0]
                 .groupby('song', as_index=False)
@@ -123,7 +133,7 @@ with tab1:
         fig, ax = plt.subplots()
 
         for idx, (song, days, streams) in enumerate(zip(scatter_data["song"], scatter_data["Days"], scatter_data["Streams"])):
-            ax.scatter(days, streams, color=colors(idx), label=song, s=15, alpha=0.8)  
+            ax.scatter(days, streams, color=color_dict(idx), label=song, s=15, alpha=0.8)  
 
         # Trendline Calculation
         x = scatter_data["Days"]
@@ -229,7 +239,7 @@ with tab1:
                     labels=stream_distribution["song"], 
                     autopct=lambda pct: autopct_format(pct, stream_distribution["streams"]),
                     startangle=90, 
-                    colors=plt.cm.tab20.colors
+                    colors=color_dict
                 )
 
                 # Style the text
@@ -263,7 +273,6 @@ with tab1:
         pivot_df = pivot_df.sort_index()
 
 
-        color_list = [colors(i) for i in range(colors.N)]
 
         fig, ax = plt.subplots(figsize=(12, 6))
 
@@ -274,7 +283,7 @@ with tab1:
             ax.bar(pivot_df.index, pivot_df[song], 
                 bottom=bottom, 
                 label=song,
-                color=color_list[idx % len(color_list)],  # Ensure colors don't go out of range
+                color=color_dict[song], 
                 width=4.5)
             bottom += pivot_df[song]
 
@@ -283,7 +292,7 @@ with tab1:
         ax.set_xlabel('Week', fontsize=12)
         ax.set_ylabel('Total Streams', fontsize=12)
         ax.legend(title='Song', bbox_to_anchor=(1.05, 1), loc='upper left')
-        ax.grid(True, which='both', alpha=0.6)
+        ax.grid(True, which='both', alpha=0.3)
         plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
         plt.tight_layout()
 
