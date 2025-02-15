@@ -283,7 +283,7 @@ with tab1:
         ax.set_xlabel('Week', fontsize=12)
         ax.set_ylabel('Total Streams', fontsize=12)
         ax.legend(title='Song', bbox_to_anchor=(1.05, 1), loc='upper left')
-        ax.grid(True, linestyle='--', linewidth=0.7, color='gray')
+        ax.grid(True, which='both', alpha=0.6)
         plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
         plt.tight_layout()
 
