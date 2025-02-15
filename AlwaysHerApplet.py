@@ -231,6 +231,8 @@ with tab1:
                     absolute = int(round(pct * total / 100.0))  # Convert percentage to stream count
                     return f"{pct:.1f}%\n({absolute})"
 
+                song_colors = [color_dict[song] for song in stream_distribution["song"]]
+
                 # Create a pie chart
                 fig, ax = plt.subplots()
                 wedges, texts, autotexts = ax.pie(
@@ -238,7 +240,7 @@ with tab1:
                     labels=stream_distribution["song"], 
                     autopct=lambda pct: autopct_format(pct, stream_distribution["streams"]),
                     startangle=90, 
-                    colors=color_dict
+                    colors=song_colors
                 )
 
                 # Style the text
