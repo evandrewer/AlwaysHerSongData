@@ -255,8 +255,8 @@ with tab1:
 
         st.subheader("Weekly Stream Counts Stacked Bar Graph")
 
-        data_by_song['week'] = data_by_song['date'].dt.to_period('W').apply(lambda r: r.start_time)
-        weekly_df = data_by_song.groupby(['song', 'week'])['streams'].sum().reset_index()
+        song_summary['week'] = song_summary['date'].dt.to_period('W').apply(lambda r: r.start_time)
+        weekly_df = song_summary.groupby(['song', 'week'])['streams'].sum().reset_index()
         pivot_df = weekly_df.pivot(index='week', columns='song', values='streams').fillna(0)
         pivot_df = pivot_df.sort_index()
 
