@@ -99,14 +99,13 @@ def calculate_growth_rate_and_proportion(group):
     group['avg_prior_10_days'] = group['streams'].shift(10).rolling(window=10, min_periods=1).mean()
 
     group['growth_rate'] = ((group['avg_last_10_days'] - group['avg_prior_10_days']) / group['avg_prior_10_days']) * 100
-    group['daily_stream_proportion'] = group['streams'] / group.groupby('date')['streams'].transform('sum')
-    group['avg_10_day_proportion'] = group['daily_stream_proportion'].rolling(window=10, min_periods=1).mean()
 
     return group
 
 data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate_and_proportion)
+data_by_song['daily_stream_proportion'] = data_by_song['streams'] / data_by_song.groupby('date')['streams'].transform('sum')
+data_by_song['avg_10_day_proportion'] = data_by_song.groupby('song')['daily_stream_proportion'].rolling(window=10, min_periods=1).mean().reset_index(level=0, drop=True)
 
-# Create final dataframe with last known growth rate and 10-day average proportion
 growth_rate_per_song = (data_by_song.dropna(subset=['growth_rate'])  
                         .groupby('song', as_index=False)
                         .agg({'growth_rate': 'last', 'avg_10_day_proportion': 'last'})  
