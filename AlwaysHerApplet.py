@@ -305,18 +305,11 @@ with tab1:
 
         st.subheader("Cumulative Weekly Stream Counts")
 
-        cumulative_df = data_by_song.groupby('song').apply(
-            lambda x: x.sort_values('week').assign(cumulative_streams=x['streams'].cumsum())
-        ).reset_index(drop=True)
-
-        line_styles = ['-', '--', '-.', ':', '-', '--', '-.', ':', '-', '--', '-.']
-
         fig, ax = plt.subplots(figsize=(12, 6))
 
-        for idx, (song, song_data) in enumerate(cumulative_df.groupby('song')):
+        for idx, (song, song_data) in enumerate(weekly_df.groupby('song')):
             ax.plot(song_data['week'], song_data['cumulative_streams'], 
                     label=song, 
-                    linestyle=line_styles[idx % len(line_styles)],  
                     color=color_dict.get(song, "gray"),  # Use color_dict, default to gray if song not found
                     linewidth=1)                                    
 
