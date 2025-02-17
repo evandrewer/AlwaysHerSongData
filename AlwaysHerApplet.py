@@ -94,19 +94,22 @@ colors = plt.cm.get_cmap("tab20", len(scatter_data))
 
 # For tab1 col3
 
-def calculate_growth_rate(group):
+def calculate_growth_rate_and_proportion(group):
     group['avg_last_10_days'] = group['streams'].rolling(window=10, min_periods=1).mean()
     group['avg_prior_10_days'] = group['streams'].shift(10).rolling(window=10, min_periods=1).mean()
-    
+
     group['growth_rate'] = ((group['avg_last_10_days'] - group['avg_prior_10_days']) / group['avg_prior_10_days']) * 100
+    group['daily_stream_proportion'] = group['streams'] / group.groupby('date')['streams'].transform('sum')
+    group['avg_10_day_proportion'] = group['daily_stream_proportion'].rolling(window=10, min_periods=1).mean()
 
     return group
 
-data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate)
+data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate_and_proportion)
 
-growth_rate_per_song = (data_by_song.dropna(subset=['growth_rate'])  # Remove NaN values
+# Create final dataframe with last known growth rate and 10-day average proportion
+growth_rate_per_song = (data_by_song.dropna(subset=['growth_rate'])  
                         .groupby('song', as_index=False)
-                        .agg({'growth_rate': 'last'})  # Take last non-null value
+                        .agg({'growth_rate': 'last', 'avg_10_day_proportion': 'last'})  
                         .sort_values(by='growth_rate', ascending=False))
 
 
@@ -155,8 +158,8 @@ with tab1:
     col3 = st.columns([1])[0]
 
     with col3:
-        st.subheader("10-day Moving Growth Rate")
-        growth_rate_per_song = growth_rate_per_song.rename(columns={'song': 'Song', 'growth_rate': 'Growth Rate %'})
+        st.subheader("10-day Moving Growth Rate and Avg Stream Proportion")
+        growth_rate_per_song = growth_rate_per_song.rename(columns={'song': 'Song', 'growth_rate': 'Growth Rate %', 'avg_10_day_proportion': 'Average Proportion %'})
         st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 423)
 
         with st.expander("See explanation"):
@@ -165,6 +168,9 @@ with tab1:
                 the past 10 days and comparing to its own average streams for the 10 days prior
                 to that. For example, if a song has a 10-day growth rate of 15%, that means it was streamed
                 about 15% more than in the 10 day period before.
+                     
+                The 10-day average stream proportion is calculated by taking the proportion of streams for each 
+                song each day for 10 days, and averaging across days.
                     """)
 
 
