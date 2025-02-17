@@ -358,7 +358,6 @@ with tab1:
         ax.set_xlabel('Date', fontsize=10)
         ax.set_ylabel('Streams', fontsize=12)
         ax.set_xticklabels(song_data['date'], rotation=45)  # Ensuring readability of x-axis labels
-        ax.set_ylim(0, 150) 
         ax.legend(title='Song', bbox_to_anchor=(1.05, 1), loc='upper left')
         ax.grid(True, linestyle='--', color='gray', alpha=0.7)  # Standardizing grid appearance for visual clarity
         plt.tight_layout()
