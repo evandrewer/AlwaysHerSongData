@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
-import os
+from datetime import timedelta
 
 import streamlit as st
 
@@ -334,6 +334,33 @@ with tab1:
         ax.set_ylabel('Cumulative Streams', fontsize=12)
         ax.legend(title='Song', bbox_to_anchor=(1.05, 1), loc='upper left')
         ax.grid(True, linestyle='--', color='gray', alpha=0.7)  # Darker, dashed grid lines
+        plt.tight_layout()
+
+        st.pyplot(fig)
+
+
+    # Last 28 Days Plot
+
+        st.subheader("Stream Counts for Past 28 Days")
+
+        latest_date = data_by_song['date'].max()
+        past_28_days_df = data_by_song[data_by_song['date'] >= (latest_date - timedelta(days=28))]
+
+        fig, ax = plt.subplots(figsize=(12, 6))
+
+        for idx, (song, song_data) in enumerate(past_28_days_df.groupby('song')):
+            ax.plot(song_data['date'], song_data['streams'], 
+                    label=song, 
+                    color=color_dict.get(song, "gray"),  # Ensuring consistency with the defined color scheme
+                    linewidth=1)                                    
+
+        ax.set_title('Stream Counts for Past 28 Days', fontsize=16)
+        ax.set_xlabel('Date', fontsize=10)
+        ax.set_ylabel('Streams', fontsize=12)
+        ax.set_xticklabels(song_data['date'], rotation=45)  # Ensuring readability of x-axis labels
+        ax.set_ylim(0, 150) 
+        ax.legend(title='Song', bbox_to_anchor=(1.05, 1), loc='upper left')
+        ax.grid(True, linestyle='--', color='gray', alpha=0.7)  # Standardizing grid appearance for visual clarity
         plt.tight_layout()
 
         st.pyplot(fig)
