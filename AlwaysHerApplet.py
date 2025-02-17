@@ -3,6 +3,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 from datetime import timedelta
+import plotly.express as px
 
 import streamlit as st
 
@@ -115,7 +116,7 @@ growth_rate_per_song = (data_by_song.dropna(subset=['growth_rate'])
 
 
 
-tab1, tab2 = st.tabs(['General Stats', 'Stream Breakdowns'])
+tab1, tab2, tab3 = st.tabs(['General Stats', 'Stream Breakdowns', 'Worldwide Streams'])
 
 with tab1:
 
@@ -369,3 +370,23 @@ with tab1:
         plt.tight_layout()
 
         st.pyplot(fig)
+
+
+
+    with tab3:
+        data = pd.DataFrame({
+            'Country': ['USA', 'Canada', 'Germany', 'France', 'UK', 'Australia'],
+            'Streams': [120000, 80000, 95000, 73000, 85000, 66000]
+        })
+
+        # Create a choropleth map
+        fig = px.choropleth(
+            data_frame=data, 
+            locations='Country',  # Column with country names or ISO codes
+            locationmode='country names',  # Use 'ISO-3' if using 3-letter country codes
+            color='Streams',  # Value to color by
+            title="Total Streams by Country",
+            color_continuous_scale="Greens",  # You can change the color scheme
+        )
+
+        st.plotly_chart(fig)
