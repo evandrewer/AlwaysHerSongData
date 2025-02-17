@@ -299,3 +299,32 @@ with tab1:
 
         # Display the plot in Streamlit
         st.pyplot(fig)
+
+
+    # CUMU WEEKLY STREAMS CHART
+
+        st.subheader("Cumulative Weekly Stream Counts")
+
+        cumulative_df = data_by_song.groupby('song').apply(
+            lambda x: x.sort_values('week').assign(cumulative_streams=x['streams'].cumsum())
+        ).reset_index(drop=True)
+
+        line_styles = ['-', '--', '-.', ':', '-', '--', '-.', ':', '-', '--', '-.']
+
+        fig, ax = plt.subplots(figsize=(12, 6))
+
+        for idx, (song, song_data) in enumerate(cumulative_df.groupby('song')):
+            ax.plot(song_data['week'], song_data['cumulative_streams'], 
+                    label=song, 
+                    linestyle=line_styles[idx % len(line_styles)],  
+                    color=color_dict.get(song, "gray"),  # Use color_dict, default to gray if song not found
+                    linewidth=1)                                    
+
+        ax.set_title('Cumulative Weekly Stream Counts', fontsize=16)
+        ax.set_xlabel('Week', fontsize=12)
+        ax.set_ylabel('Cumulative Streams', fontsize=12)
+        ax.legend(title='Song', bbox_to_anchor=(1.05, 1), loc='upper left')
+        ax.grid(True, linestyle='--', color='gray', alpha=0.7)  # Darker, dashed grid lines
+        plt.tight_layout()
+
+        st.pyplot(fig)
