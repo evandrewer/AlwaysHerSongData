@@ -305,9 +305,25 @@ with tab1:
 
         st.subheader("Cumulative Weekly Stream Counts")
 
+        # Adjust df
+        def filter_zeros_before_release(df):
+            filtered_dfs = []
+            for song, song_data in df.groupby('song'):
+                song_data = song_data.sort_values('week').reset_index(drop=True)
+                first_stream_week_idx = song_data.loc[song_data['streams'] > 0].index.min()
+                prior_week_idx = max(first_stream_week_idx - 1, 0)
+                filtered_song_data = song_data.loc[prior_week_idx:]
+                filtered_dfs.append(filtered_song_data)
+            return pd.concat(filtered_dfs)
+        filtered_df2 = filter_zeros_before_release(weekly_df)
+
+        cumulative_df = filtered_df2.groupby('song').apply(
+            lambda x: x.sort_values('week').assign(cumulative_streams=x['streams'].cumsum())
+        ).reset_index(drop=True)
+
         fig, ax = plt.subplots(figsize=(12, 6))
 
-        for idx, (song, song_data) in enumerate(weekly_df.groupby('song')):
+        for idx, (song, song_data) in enumerate(cumulative_df.groupby('song')):
             ax.plot(song_data['week'], song_data['cumulative_streams'], 
                     label=song, 
                     color=color_dict.get(song, "gray"),  # Use color_dict, default to gray if song not found
