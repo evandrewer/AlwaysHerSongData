@@ -105,6 +105,7 @@ def calculate_growth_rate_and_proportion(group):
 data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate_and_proportion)
 data_by_song['daily_stream_proportion'] = data_by_song['streams'] / data_by_song.groupby('date')['streams'].transform('sum')
 data_by_song['avg_10_day_proportion'] = data_by_song.groupby('song')['daily_stream_proportion'].rolling(window=10, min_periods=1).mean().reset_index(level=0, drop=True)
+data_by_song['avg_10_day_proportion'] *= 100
 
 growth_rate_per_song = (data_by_song.dropna(subset=['growth_rate'])  
                         .groupby('song', as_index=False)
