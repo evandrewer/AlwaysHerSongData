@@ -135,18 +135,19 @@ with tab1:
         st.subheader("Days Since Release vs. Streams")
         fig, ax = plt.subplots()
 
+        # Scatterplot
         for idx, (song, days, streams) in enumerate(zip(scatter_data["song"], scatter_data["Days"], scatter_data["Streams"])):
             ax.scatter(days, streams, color=color_dict[song], label=song, s=15, alpha=0.8)  
 
         # Trendline Calculation
-        x = scatter_data["Days"]
-        y = scatter_data["Streams"]
-        
+        x = scatter_data["Days"].values.reshape(-1, 1) 
+        y = scatter_data["Streams"].values
+
         if len(x) > 1:
-            coeffs = np.polyfit(x, y, deg=1)
-            trendline = np.poly1d(coeffs)  
-            sorted_x = np.sort(x)
-            ax.plot(sorted_x, trendline(sorted_x), linestyle="dashed", color="white", alpha=0.7, linewidth=0.8, label="Trendline")
+            slope = np.linalg.lstsq(x, y, rcond=None)[0][0]  
+            trendline_y = slope * np.sort(x.flatten()) 
+
+            ax.plot(np.sort(x.flatten()), trendline_y, linestyle="dashed", color="white", alpha=0.7, linewidth=0.8, label="Trendline (Intercept=0)")
 
         # Labels & Formatting
         ax.set_xlabel("Days Since Release", color='white')
