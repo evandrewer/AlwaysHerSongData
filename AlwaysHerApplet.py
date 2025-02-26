@@ -113,15 +113,15 @@ colors = plt.cm.get_cmap("tab20", len(scatter_data))
 # For tab1 col3
 
 def calculate_growth_rate_and_proportion(group):
-    group['avg_last_10_days'] = group['streams'].rolling(window=10, min_periods=1).mean()
-    group['avg_prior_10_days'] = group['streams'].shift(10).rolling(window=10, min_periods=1).mean()
+    group['avg_last_10_days'] = group['selected_streams'].rolling(window=10, min_periods=1).mean()
+    group['avg_prior_10_days'] = group['selected_streams'].shift(10).rolling(window=10, min_periods=1).mean()
 
     group['growth_rate'] = ((group['avg_last_10_days'] - group['avg_prior_10_days']) / group['avg_prior_10_days']) * 100
 
     return group
 
 data_by_song = data_by_song.groupby('song', group_keys=False).apply(calculate_growth_rate_and_proportion)
-data_by_song['daily_stream_proportion'] = data_by_song['streams'] / data_by_song.groupby('date')['streams'].transform('sum')
+data_by_song['daily_stream_proportion'] = data_by_song['selected_streams'] / data_by_song.groupby('date')['selected_streams'].transform('sum')
 data_by_song['avg_10_day_proportion'] = data_by_song.groupby('song')['daily_stream_proportion'].rolling(window=10, min_periods=1).mean().reset_index(level=0, drop=True)
 data_by_song['avg_10_day_proportion'] *= 100
 
