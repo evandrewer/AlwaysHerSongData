@@ -204,10 +204,10 @@ with tab1:
         filtered_data = data_by_song[data_by_song["date"] >= earliest_release_date].copy()
 
         daily_avg_streams = (filtered_data
-                            .groupby("date")["streams"]
+                            .groupby("date")['selected_streams']
                             .mean()
                             .reset_index()
-                            .rename(columns={"streams": "Daily Streams"}))
+                            .rename(columns={'selected_streams': "Daily Streams"}))
 
         weekly_avg_streams = (daily_avg_streams
                             .groupby(pd.Grouper(key="date", freq="W"))["Daily Streams"]
