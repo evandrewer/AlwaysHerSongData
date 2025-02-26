@@ -50,21 +50,19 @@ song_data = songdata()
 st.title("Always Her Streaming Stats")
 
 st.sidebar.header("Select Data Source")
-show_spotify = st.sidebar.checkbox("Spotify Only", value=True)
-show_apple = st.sidebar.checkbox("Apple Music Only", value=False)
-show_both = st.sidebar.checkbox("Both (Summed)", value=False)
-
-# Ensure only one option is selected at a time
-if sum([show_spotify, show_apple, show_both]) != 1:
-    st.warning("Please select exactly one data source.")
+data_source = st.sidebar.radio(
+    "Choose Streaming Data:",
+    options=["Spotify Only", "Apple Music Only", "Both (Summed)"],
+    index=0  # Default selection: Spotify Only
+)
 
 # Modify the dataframe based on selection
-if show_spotify:
-    song_data["selected_streams"] = song_data["streams"]  # Assuming 'streams' is the Spotify column
-elif show_apple:
-    song_data["selected_streams"] = song_data["apple"]
-elif show_both:
-    song_data["selected_streams"] = song_data["streams"] + song_data["apple"]
+if data_source == "Spotify Only":
+    song_data["selected_streams"] = song_data["streams"]  # Spotify data
+elif data_source == "Apple Music Only":
+    song_data["selected_streams"] = song_data["apple"]  # Apple Music data
+elif data_source == "Both (Summed)":
+    song_data["selected_streams"] = song_data["streams"] + song_data["apple"]  # Sum of both
 
 # Song selection multiselect
 song_titles = ['Silhouette', 'In the Beginning', 'Airport Girl', 'Mr. Nice Guy', 
