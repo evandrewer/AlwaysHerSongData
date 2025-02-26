@@ -240,15 +240,15 @@ with tab1:
         if not selected_day_data.empty:
             # Compute total streams per song for that date
             stream_distribution = (selected_day_data
-                                    .groupby("song")["streams"]
+                                    .groupby("song")['selected_streams']
                                     .sum()
                                     .reset_index())
 
             # Remove songs with 0 streams
-            stream_distribution = stream_distribution[stream_distribution["streams"] > 0]
+            stream_distribution = stream_distribution[stream_distribution['selected_streams'] > 0]
 
             # Calculate the total streams for the selected day
-            total_streams = stream_distribution["streams"].sum()
+            total_streams = stream_distribution['selected_streams'].sum()
 
             if not stream_distribution.empty:
                 # Custom label function to show both percentage and stream count
@@ -262,9 +262,9 @@ with tab1:
                 # Create a pie chart
                 fig, ax = plt.subplots()
                 wedges, texts, autotexts = ax.pie(
-                    stream_distribution["streams"], 
+                    stream_distribution['selected_streams'], 
                     labels=stream_distribution["song"], 
-                    autopct=lambda pct: autopct_format(pct, stream_distribution["streams"]),
+                    autopct=lambda pct: autopct_format(pct, stream_distribution['selected_streams']),
                     startangle=90, 
                     colors=song_colors
                 )
@@ -295,8 +295,8 @@ with tab1:
         data_by_song = data_by_song[data_by_song['date'] >= '2024-04-21']
 
         data_by_song['week'] = data_by_song['date'].dt.to_period('W').apply(lambda r: r.start_time)
-        weekly_df = data_by_song.groupby(['song', 'week'])['streams'].sum().reset_index()
-        pivot_df = weekly_df.pivot(index='week', columns='song', values='streams').fillna(0)
+        weekly_df = data_by_song.groupby(['song', 'week'])['selected_streams'].sum().reset_index()
+        pivot_df = weekly_df.pivot(index='week', columns='song', values='selected_streams').fillna(0)
         pivot_df = pivot_df.sort_index()
 
 
@@ -336,7 +336,7 @@ with tab1:
             filtered_dfs = []
             for song, song_data in df.groupby('song'):
                 song_data = song_data.sort_values('week').reset_index(drop=True)
-                first_stream_week_idx = song_data.loc[song_data['streams'] > 0].index.min()
+                first_stream_week_idx = song_data.loc[song_data['selected_streams'] > 0].index.min()
                 prior_week_idx = max(first_stream_week_idx - 1, 0)
                 filtered_song_data = song_data.loc[prior_week_idx:]
                 filtered_dfs.append(filtered_song_data)
@@ -344,7 +344,7 @@ with tab1:
         filtered_df2 = filter_zeros_before_release(weekly_df)
 
         cumulative_df = filtered_df2.groupby('song').apply(
-            lambda x: x.sort_values('week').assign(cumulative_streams=x['streams'].cumsum())
+            lambda x: x.sort_values('week').assign(cumulative_streams=x['selected_streams'].cumsum())
         ).reset_index(drop=True)
 
         fig, ax = plt.subplots(figsize=(12, 6))
@@ -375,7 +375,7 @@ with tab1:
         fig, ax = plt.subplots(figsize=(12, 6))
 
         for idx, (song, song_data) in enumerate(past_28_days_df.groupby('song')):
-            ax.plot(song_data['date'], song_data['streams'], 
+            ax.plot(song_data['date'], song_data['selected_streams'], 
                     label=song, 
                     color=color_dict.get(song, "gray"),  # Ensuring consistency with the defined color scheme
                     linewidth=1)                                    
