@@ -47,18 +47,36 @@ def songdata(show_spinner=True):
 
 song_data = songdata()
 
+st.title("Always Her Streaming Stats")
 
-st.title("Always Her Spotify Stats")
+st.sidebar.header("Select Data Source")
+show_spotify = st.sidebar.checkbox("Spotify Only", value=True)
+show_apple = st.sidebar.checkbox("Apple Music Only", value=False)
+show_both = st.sidebar.checkbox("Both (Summed)", value=False)
 
+# Ensure only one option is selected at a time
+if sum([show_spotify, show_apple, show_both]) != 1:
+    st.warning("Please select exactly one data source.")
+
+# Modify the dataframe based on selection
+if show_spotify:
+    song_data["selected_streams"] = song_data["streams"]  # Assuming 'streams' is the Spotify column
+elif show_apple:
+    song_data["selected_streams"] = song_data["apple"]
+elif show_both:
+    song_data["selected_streams"] = song_data["streams"] + song_data["apple"]
+
+# Song selection multiselect
 song_titles = ['Silhouette', 'In the Beginning', 'Airport Girl', 'Mr. Nice Guy', 
                'My Brain is Carrying the World', 'One Look At You - Acoustic',
                'Probably Nothing - Acoustic', 'Savior - Acoustic',
                'In the Beginning - Acoustic', 'Airport Girl - Acoustic', 'Timeless']
+
 selected_songs = st.sidebar.multiselect(
     "Select Songs", options=song_titles, default=song_titles)
 
+# Filter dataset based on selected songs
 data_by_song = song_data[song_data['song'].isin(selected_songs)]
-
 
 
 # Color dictionary
@@ -66,6 +84,7 @@ num_songs = 11
 tab20_colors = plt.cm.get_cmap("tab20", num_songs)
 
 color_dict = {song: tab20_colors(i) for i, song in enumerate(song_titles)}
+
 
 
 
