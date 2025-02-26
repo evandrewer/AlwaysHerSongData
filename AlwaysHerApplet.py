@@ -87,17 +87,9 @@ color_dict = {song: tab20_colors(i) for i, song in enumerate(song_titles)}
 
 
 # For tab1 col1
-if data_source == "Spotify":
-    stream_col = "streams"
-elif data_source == "Apple Music":
-    stream_col = "apple"
-else:  # "Both"
-    song_data["total_streams"] = song_data["streams"] + song_data["apple"]
-    stream_col = "total_streams"
-
-song_summary = (data_by_song[data_by_song[stream_col] > 0]
+song_summary = (data_by_song[data_by_song['selected_streams'] > 0]
                 .groupby('song', as_index=False)
-                .agg(Streams=(stream_col, 'sum'),
+                .agg(Streams=(data_by_song['selected_streams'], 'sum'),
                      Release_Date=('date', 'min')))
 
 song_summary["Release_Date"] = pd.to_datetime(song_summary["Release_Date"])
