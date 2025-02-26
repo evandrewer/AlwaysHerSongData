@@ -53,7 +53,7 @@ st.sidebar.header("Select Data Source")
 data_source = st.sidebar.radio(
     "Choose Streaming Data:",
     options=["Spotify Only", "Apple Music Only", "Both (Summed)"],
-    index=0  # Default selection: Spotify Only
+    index=2  # Default selection: Spotify Only
 )
 
 # Modify the dataframe based on selection
