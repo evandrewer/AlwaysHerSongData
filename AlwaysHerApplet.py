@@ -89,7 +89,7 @@ color_dict = {song: tab20_colors(i) for i, song in enumerate(song_titles)}
 # For tab1 col1
 song_summary = (data_by_song[data_by_song['selected_streams'] > 0]
                 .groupby('song', as_index=False)
-                .agg(Streams=(data_by_song['selected_streams'], 'sum'),
+                .agg(Streams=('selected_streams', 'sum'),
                      Release_Date=('date', 'min')))
 
 song_summary["Release_Date"] = pd.to_datetime(song_summary["Release_Date"])
