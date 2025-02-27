@@ -8,7 +8,7 @@ import plotly.express as px
 import streamlit as st
 
 @st.cache_data
-def songdata(show_spinner=True):
+def songdata(show_spinner=False):
     st.cache_data.clear()
     
     silhouette = pd.read_csv("Silhouette (The Halloween Song)-timeline.csv")
