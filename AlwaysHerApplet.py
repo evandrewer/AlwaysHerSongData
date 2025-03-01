@@ -289,7 +289,7 @@ with tab1:
 
                 # Add custom labels showing both percentage and total streams
                 stream_distribution["label_text"] = stream_distribution.apply(
-                    lambda row: f"{row['song']}<br>{(row['selected_streams'] / total_streams) * 100:.1f}% ({row['selected_streams']:,})", 
+                    lambda row: f"{(row['selected_streams'] / total_streams) * 100:.1f}% ({row['selected_streams']:,})", 
                     axis=1
                 )
 
