@@ -280,11 +280,19 @@ with tab1:
             if not stream_distribution.empty:
                 # Convert Matplotlib RGBA colors to HEX for Plotly
                 def rgba_to_hex(rgba):
-                    return mcolors.to_hex(rgba)
+                    return mcolors.to_hex(rgba)  # Correct usage
 
                 plotly_color_dict = {song: rgba_to_hex(color) for song, color in color_dict.items()}
 
-                # Create a Plotly pie chart with custom colors
+                # Calculate total streams for the selected date
+                total_streams = stream_distribution['selected_streams'].sum()
+
+                # Add custom text showing both percentage and total stream count
+                stream_distribution["custom_text"] = (
+                    stream_distribution["selected_streams"].apply(lambda x: f"{(x / total_streams) * 100:.1f}%\n({x:,} streams)")
+                )
+
+                # Create a Plotly pie chart with custom hover text
                 fig = px.pie(
                     stream_distribution,
                     names="song",
@@ -292,9 +300,20 @@ with tab1:
                     title=f"Stream Distribution on {selected_date.strftime('%B %d, %Y')}",
                     color="song",
                     color_discrete_map=plotly_color_dict,  # Use converted colors
+                    custom_data=["custom_text"]  # Pass custom text to hover data
                 )
 
-                st.plotly_chart(fig)  # Display the pie chart
+                # Modify hover text to display both percentage and total streams
+                fig.update_traces(
+                    textinfo="percent",
+                    hovertemplate="<b>%{label}</b><br>%{customdata}<extra></extra>"  # Uses the custom text
+                )
+
+                st.plotly_chart(fig)
+
+                # Display total stream count below the pie chart
+                st.markdown(f"**Total Streams on {selected_date.strftime('%B %d, %Y')}:** {total_streams:,}")
+
             else:
                 st.write("No songs had streams on this date.")
         else:
