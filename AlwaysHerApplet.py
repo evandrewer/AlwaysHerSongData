@@ -171,7 +171,11 @@ with tab1:
             values=stream_counts,
             title="Proportion of Total Streams by Platform",
             color=platforms,
-            color_discrete_map={"Spotify": "#1DB954", "Apple Music": "#FA243C", "YouTube": "#FF0000"},
+            color_discrete_map={"Spotify": "#1DB954", "Apple Music": "#F52F45", "YouTube": "#FF0000"},
+        )
+
+        fig.update_traces(
+            hoverinfo="skip"  # Disable hover text
         )
         
         st.plotly_chart(fig)
