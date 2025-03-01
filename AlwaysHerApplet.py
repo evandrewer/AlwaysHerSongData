@@ -259,65 +259,65 @@ with tab1:
 
     # --- PIE CHART FOR STREAM DISTRIBUTION ---
 
-        st.subheader("Song Stream Distribution on a Specific Day")
+    st.subheader("Song Stream Distribution on a Specific Day")
 
-        # Date selector
-        selected_date = st.date_input("Select a date", min_value=earliest_release_date, max_value=data_by_song["date"].max())
+    # Date selector
+    selected_date = st.date_input("Select a date", min_value=earliest_release_date, max_value=data_by_song["date"].max())
 
-        # Filter data for selected date
-        selected_day_data = data_by_song[data_by_song["date"] == pd.to_datetime(selected_date)]
+    # Filter data for selected date
+    selected_day_data = data_by_song[data_by_song["date"] == pd.to_datetime(selected_date)]
 
-        if not selected_day_data.empty:
-            # Compute total streams per song for that date
-            stream_distribution = (selected_day_data
-                                    .groupby("song")['selected_streams']
-                                    .sum()
-                                    .reset_index())
+    if not selected_day_data.empty:
+        # Compute total streams per song for that date
+        stream_distribution = (selected_day_data
+                                .groupby("song")['selected_streams']
+                                .sum()
+                                .reset_index())
 
-            # Remove songs with 0 streams
-            stream_distribution = stream_distribution[stream_distribution['selected_streams'] > 0]
+        # Remove songs with 0 streams
+        stream_distribution = stream_distribution[stream_distribution['selected_streams'] > 0]
 
-            if not stream_distribution.empty:
-                # Convert Matplotlib RGBA colors to HEX for Plotly
-                def rgba_to_hex(rgba):
-                    return mcolors.to_hex(rgba)  # Correct usage
+        if not stream_distribution.empty:
+            # Convert Matplotlib RGBA colors to HEX for Plotly
+            def rgba_to_hex(rgba):
+                return mcolors.to_hex(rgba)  # Correct usage
 
-                plotly_color_dict = {song: rgba_to_hex(color) for song, color in color_dict.items()}
+            plotly_color_dict = {song: rgba_to_hex(color) for song, color in color_dict.items()}
 
-                # Calculate total streams for the selected date
-                total_streams = stream_distribution['selected_streams'].sum()
+            # Calculate total streams for the selected date
+            total_streams = stream_distribution['selected_streams'].sum()
 
-                # Add custom text showing both percentage and total stream count
-                stream_distribution["custom_text"] = (
-                    stream_distribution["selected_streams"].apply(lambda x: f"{(x / total_streams) * 100:.1f}%\n({x:,} streams)")
-                )
+            # Add custom text showing both percentage and total stream count
+            stream_distribution["custom_text"] = (
+                stream_distribution["selected_streams"].apply(lambda x: f"{(x / total_streams) * 100:.1f}%\n({x:,} streams)")
+            )
 
-                # Create a Plotly pie chart with custom hover text
-                fig = px.pie(
-                    stream_distribution,
-                    names="song",
-                    values="selected_streams",
-                    title=f"Stream Distribution on {selected_date.strftime('%B %d, %Y')}",
-                    color="song",
-                    color_discrete_map=plotly_color_dict,  # Use converted colors
-                    custom_data=["custom_text"]  # Pass custom text to hover data
-                )
+            # Create a Plotly pie chart with custom hover text
+            fig = px.pie(
+                stream_distribution,
+                names="song",
+                values="selected_streams",
+                title=f"Stream Distribution on {selected_date.strftime('%B %d, %Y')}",
+                color="song",
+                color_discrete_map=plotly_color_dict,  # Use converted colors
+                custom_data=["custom_text"]  # Pass custom text to hover data
+            )
 
-                # Modify hover text to display both percentage and total streams
-                fig.update_traces(
-                    textinfo="percent",
-                    hovertemplate="<b>%{label}</b><br>%{customdata}<extra></extra>"  # Uses the custom text
-                )
+            # Modify hover text to display both percentage and total streams
+            fig.update_traces(
+                textinfo="percent",
+                hovertemplate="<b>%{label}</b><br>%{customdata}<extra></extra>"  # Uses the custom text
+            )
 
-                st.plotly_chart(fig)
+            st.plotly_chart(fig)
 
-                # Display total stream count below the pie chart
-                st.markdown(f"**Total Streams on {selected_date.strftime('%B %d, %Y')}:** {total_streams:,}")
+            # Display total stream count below the pie chart
+            st.markdown(f"**Total Streams on {selected_date.strftime('%B %d, %Y')}:** {total_streams:,}")
 
-            else:
-                st.write("No songs had streams on this date.")
         else:
-            st.write("No stream data available for this date.")
+            st.write("No songs had streams on this date.")
+    else:
+        st.write("No stream data available for this date.")
 
 
     # STACKED BAR CHART
