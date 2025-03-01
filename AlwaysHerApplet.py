@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from datetime import timedelta
 import plotly.express as px
+import matplotlib.colors as mcolors
 
 import streamlit as st
 
@@ -279,7 +280,7 @@ with tab1:
             if not stream_distribution.empty:
                 # Convert Matplotlib RGBA colors to HEX for Plotly
                 def rgba_to_hex(rgba):
-                    return plt.colors.to_hex(rgba)
+                    return mcolors.to_hex(rgba)
 
                 plotly_color_dict = {song: rgba_to_hex(color) for song, color in color_dict.items()}
 
