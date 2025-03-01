@@ -52,17 +52,22 @@ st.title("Always Her Streaming Stats")
 st.sidebar.header("Select Data Source")
 data_source = st.sidebar.radio(
     "Choose Streaming Data:",
-    options=["Spotify Only", "Apple Music Only", "Both (Summed)"],
-    index=2  # Default selection: Spotify Only
+    options=["Spotify Only", "Apple Music Only", "YouTube Music Only", "All (Summed)", "All but YouTube"],
+    index=4  # Default selection: Spotify Only
 )
 
 # Modify the dataframe based on selection
 if data_source == "Spotify Only":
-    song_data["selected_streams"] = song_data["streams"]  # Spotify data
+    song_data["selected_streams"] = song_data["spotify"]  # Spotify data
 elif data_source == "Apple Music Only":
     song_data["selected_streams"] = song_data["apple"]  # Apple Music data
-elif data_source == "Both (Summed)":
-    song_data["selected_streams"] = song_data["streams"] + song_data["apple"]  # Sum of both
+elif data_source == "YouTube Music Only":
+    song_data["selected_streams"] = song_data["youtube"]  # YouTube Music data
+elif data_source == "All (Summed)":
+    song_data["selected_streams"] = song_data["spotify"] + song_data["apple"] + song_data["youtube"] # Sum of all
+elif data_source == "All but YouTube":
+    song_data["selected_streams"] = song_data["spotify"] + song_data["apple"] # Sum of all minus YouTube
+
 
 # Song selection multiselect
 song_titles = ['Silhouette', 'In the Beginning', 'Airport Girl', 'Mr. Nice Guy', 
