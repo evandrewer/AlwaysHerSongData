@@ -91,7 +91,7 @@ color_dict = {song: tab20_colors(i) for i, song in enumerate(song_titles)}
 
 
 
-# For tab1 col1
+# For tab1, col1
 song_summary = (data_by_song[data_by_song['selected_streams'] > 0]
                 .groupby('song', as_index=False)
                 .agg(Streams=('selected_streams', 'sum'),
@@ -109,13 +109,23 @@ grand_total = song_summary["Streams"].sum()
 
 
 # For tab1, col2
+
+total_spotify = song_data["spotify"].sum()
+total_apple = song_data["apple"].sum()
+total_youtube = song_data["youtube"].sum()
+
+platforms = ["Spotify", "Apple Music", "YouTube"]
+stream_counts = [total_spotify, total_apple, total_youtube]
+
+
+# For tab1, col3
 scatter_data = song_summary.copy()
 
 plt.style.use('dark_background')
 colors = plt.cm.get_cmap("tab20", len(scatter_data))
 
 
-# For tab1 col3
+# For tab1, col4
 
 def calculate_growth_rate_and_proportion(group):
     group['avg_last_10_days'] = group['selected_streams'].rolling(window=10, min_periods=1).mean()
@@ -154,6 +164,20 @@ with tab1:
     col2 = st.columns([1])[0]
 
     with col2:
+
+        fig = px.pie(
+            names=platforms,
+            values=stream_counts,
+            title="Proportion of Total Streams by Platform",
+            color=platforms,
+            color_discrete_map={"Spotify": "#1DB954", "Apple Music": "#FA243C", "YouTube": "#FF0000"},
+        )
+        
+        st.plotly_chart(fig)
+
+    col3 = st.columns([1])[0]
+
+    with col3:
         st.subheader("Days Since Release vs. Streams")
         fig, ax = plt.subplots()
 
@@ -180,9 +204,9 @@ with tab1:
 
         st.pyplot(fig)
 
-    col3 = st.columns([1])[0]
+    col4 = st.columns([1])[0]
 
-    with col3:
+    with col4:
         st.subheader("10-day Moving Growth Rate and Avg Stream Proportion")
         growth_rate_per_song = growth_rate_per_song.rename(columns={'song': 'Song', 'growth_rate': 'Growth Rate %', 'avg_10_day_proportion': 'Average Proportion %'})
         st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 423)
