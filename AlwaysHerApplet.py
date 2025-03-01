@@ -284,7 +284,16 @@ with tab1:
 
                 plotly_color_dict = {song: rgba_to_hex(color) for song, color in color_dict.items()}
 
-                # Create a Plotly pie chart with custom colors
+                # Calculate total streams for the selected date
+                total_streams = stream_distribution['selected_streams'].sum()
+
+                # Add custom labels showing both percentage and total streams
+                stream_distribution["label_text"] = stream_distribution.apply(
+                    lambda row: f"{row['song']}<br>{(row['selected_streams'] / total_streams) * 100:.1f}% ({row['selected_streams']:,})", 
+                    axis=1
+                )
+
+                # Create a Plotly pie chart
                 fig = px.pie(
                     stream_distribution,
                     names="song",
@@ -294,7 +303,18 @@ with tab1:
                     color_discrete_map=plotly_color_dict,  # Use converted colors
                 )
 
-                st.plotly_chart(fig)  # Display the pie chart
+                # Display labels directly on the pie chart
+                fig.update_traces(
+                    text=stream_distribution["label_text"],  # Show both percentage & total streams
+                    textinfo="text",  # Display custom labels directly
+                    hoverinfo="skip"  # Disable hover text
+                )
+
+                st.plotly_chart(fig)
+
+                # Display total stream count below the pie chart
+                st.markdown(f"**Total Streams on {selected_date.strftime('%B %d, %Y')}:** {total_streams:,}")
+
             else:
                 st.write("No songs had streams on this date.")
         else:
