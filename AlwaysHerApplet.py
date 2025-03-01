@@ -263,8 +263,6 @@ with tab1:
 
     # --- PIE CHART FOR STREAM DISTRIBUTION ---
 
-        st.subheader("Song Stream Distribution on a Specific Day")
-
         # Date selector
         selected_date = st.date_input("Select a date", min_value=earliest_release_date, max_value=data_by_song["date"].max())
 
