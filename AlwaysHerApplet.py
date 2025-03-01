@@ -276,41 +276,18 @@ with tab1:
             # Remove songs with 0 streams
             stream_distribution = stream_distribution[stream_distribution['selected_streams'] > 0]
 
-            # Calculate the total streams for the selected day
-            total_streams = stream_distribution['selected_streams'].sum()
-
             if not stream_distribution.empty:
-                # Custom label function to show both percentage and stream count
-                def autopct_format(pct, all_vals):
-                    total = sum(all_vals)
-                    absolute = int(round(pct * total / 100.0))  # Convert percentage to stream count
-                    return f"{pct:.1f}%\n({absolute})"
-
-                song_colors = [color_dict[song] for song in stream_distribution["song"]]
-
-                # Create a pie chart
-                fig, ax = plt.subplots()
-                wedges, texts, autotexts = ax.pie(
-                    stream_distribution['selected_streams'], 
-                    labels=stream_distribution["song"], 
-                    autopct=lambda pct: autopct_format(pct, stream_distribution['selected_streams']),
-                    startangle=90, 
-                    colors=song_colors
+                # Create a Plotly pie chart
+                fig = px.pie(
+                    stream_distribution,
+                    names="song",
+                    values="selected_streams",
+                    title=f"Stream Distribution on {selected_date.strftime('%B %d, %Y')}",
+                    color="song",
+                    color_discrete_map=color_dict,  # Ensure colors match your existing scheme
                 )
 
-                # Style the text
-                for text in texts:
-                    text.set_fontsize(10)
-                    text.set_fontweight("bold")
-                for autotext in autotexts:
-                    autotext.set_fontsize(9)
-
-                ax.axis("equal")  # Equal aspect ratio ensures the pie chart is circular
-
-                st.pyplot(fig)
-
-                # Display total stream count below the pie chart
-                st.markdown(f"**Total Streams:** {total_streams:,}")
+                st.plotly_chart(fig)  # Display the pie chart
             else:
                 st.write("No songs had streams on this date.")
         else:
