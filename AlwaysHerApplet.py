@@ -277,14 +277,20 @@ with tab1:
             stream_distribution = stream_distribution[stream_distribution['selected_streams'] > 0]
 
             if not stream_distribution.empty:
-                # Create a Plotly pie chart
+                # Convert Matplotlib RGBA colors to HEX for Plotly
+                def rgba_to_hex(rgba):
+                    return plt.colors.to_hex(rgba)
+
+                plotly_color_dict = {song: rgba_to_hex(color) for song, color in color_dict.items()}
+
+                # Create a Plotly pie chart with custom colors
                 fig = px.pie(
                     stream_distribution,
                     names="song",
                     values="selected_streams",
                     title=f"Stream Distribution on {selected_date.strftime('%B %d, %Y')}",
                     color="song",
-                    color_discrete_map=color_dict,  # Ensure colors match your existing scheme
+                    color_discrete_map=plotly_color_dict,  # Use converted colors
                 )
 
                 st.plotly_chart(fig)  # Display the pie chart
