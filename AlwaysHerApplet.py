@@ -335,14 +335,22 @@ with tab1:
         pivot_df = pivot_df.sort_index()
 
 
-        sorted_songs = song_summary.sort_values("Release_Date")["song"].tolist()
-        sorted_songs = [song for song in sorted_songs if song in pivot_df.columns]
+        # Get the first appearance date of each song
+        first_stream_dates = data_by_song.groupby('song')['date'].min()
+
+        # Sort songs by first stream date (earliest first)
+        sorted_songs = first_stream_dates.sort_values().index
+
+        # Reorder pivot_df columns based on first stream date
+        pivot_df = pivot_df[sorted_songs]
+
 
         fig, ax = plt.subplots(figsize=(12, 6))
 
         bottom = pd.Series([0] * len(pivot_df), index=pivot_df.index)
 
-        for song in sorted_songs:
+        # Create the stacked bar chart
+        for idx, song in enumerate(pivot_df.columns):
             ax.bar(pivot_df.index, pivot_df[song], 
                 bottom=bottom, 
                 label=song,
@@ -356,9 +364,10 @@ with tab1:
         ax.set_ylabel('Total Streams', fontsize=12)
         ax.legend(title='Song', bbox_to_anchor=(1.05, 1), loc='upper left')
         ax.grid(True, which='both', alpha=0.3)
-        plt.xticks(rotation=45)
+        plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
         plt.tight_layout()
 
+        # Display the plot in Streamlit
         st.pyplot(fig)
 
 
