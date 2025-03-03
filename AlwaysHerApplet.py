@@ -335,11 +335,8 @@ with tab1:
         pivot_df = pivot_df.sort_index()
 
 
-        # Get the first appearance date of each song
-        first_stream_dates = data_by_song.groupby('song')['date'].min()
-
         # Sort songs by first stream date (earliest first)
-        sorted_songs = first_stream_dates.sort_values().index
+        sorted_songs = song_titles.sort_values().index
 
         # Reorder pivot_df columns based on first stream date
         pivot_df = pivot_df.reindex(columns=sorted_songs)
