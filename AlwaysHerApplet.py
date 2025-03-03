@@ -342,7 +342,7 @@ with tab1:
         sorted_songs = first_stream_dates.sort_values().index
 
         # Reorder pivot_df columns based on first stream date
-        pivot_df = pivot_df[sorted_songs]
+        pivot_df = pivot_df.reindex(columns=sorted_songs)
 
 
         fig, ax = plt.subplots(figsize=(12, 6))
