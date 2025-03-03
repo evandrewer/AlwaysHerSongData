@@ -44,7 +44,7 @@ def songdata(show_spinner=True):
     return combined_songs
 
 
-# App code :)
+# App code
 
 song_data = songdata()
 
