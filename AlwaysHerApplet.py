@@ -174,7 +174,7 @@ with tab1:
             values=stream_counts,
             title="Proportion of Total Streams by Platform",
             color=platforms,
-            color_discrete_map={"Spotify": "#1DB954", "Apple Music": "#F52F45", "YouTube": "#FF0000", "Amazon": "#232F3E"},
+            color_discrete_map={"Spotify": "#1DB954", "Apple Music": "#F52F45", "YouTube": "#FF0000", "Amazon": "#25D1DA"},
         )
 
         fig.update_traces(
