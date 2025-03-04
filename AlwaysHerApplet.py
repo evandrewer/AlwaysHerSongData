@@ -53,8 +53,8 @@ st.title("Always Her Streaming Stats")
 st.sidebar.header("Select Data Source")
 data_source = st.sidebar.radio(
     "Choose Streaming Data:",
-    options=["Spotify Only", "Apple Music Only", "YouTube Music Only", "All (Summed)", "All but YouTube"],
-    index=4  # Default selection: Spotify Only
+    options=["Spotify Only", "Apple Music Only", "YouTube Music Only", "Amazon Music Only", "All (Summed)", "All but YouTube"],
+    index=5  # Default selection: Spotify Only
 )
 
 # Modify the dataframe based on selection
@@ -64,10 +64,12 @@ elif data_source == "Apple Music Only":
     song_data["selected_streams"] = song_data["apple"]  # Apple Music data
 elif data_source == "YouTube Music Only":
     song_data["selected_streams"] = song_data["youtube"]  # YouTube Music data
+elif data_source == "Amazon Music Only":
+    song_data["selected_streams"] = song_data["amazon"]  # Amazon Music data
 elif data_source == "All (Summed)":
-    song_data["selected_streams"] = song_data["spotify"] + song_data["apple"] + song_data["youtube"] # Sum of all
+    song_data["selected_streams"] = song_data["spotify"] + song_data["apple"] + song_data["youtube"] + song_data["amazon"] # Sum of all
 elif data_source == "All but YouTube":
-    song_data["selected_streams"] = song_data["spotify"] + song_data["apple"] # Sum of all minus YouTube
+    song_data["selected_streams"] = song_data["spotify"] + song_data["apple"] + song_data["amazon"] # Sum of all minus YouTube
 
 
 # Song selection multiselect
@@ -114,9 +116,10 @@ grand_total = song_summary["Streams"].sum()
 total_spotify = song_data["spotify"].sum()
 total_apple = song_data["apple"].sum()
 total_youtube = song_data["youtube"].sum()
+total_amazon = song_data["amazon"].sum()
 
-platforms = ["Spotify", "Apple Music", "YouTube"]
-stream_counts = [total_spotify, total_apple, total_youtube]
+platforms = ["Spotify", "Apple Music", "YouTube", "Amazon"]
+stream_counts = [total_spotify, total_apple, total_youtube, total_amazon]
 
 
 # For tab1, col3
@@ -171,7 +174,7 @@ with tab1:
             values=stream_counts,
             title="Proportion of Total Streams by Platform",
             color=platforms,
-            color_discrete_map={"Spotify": "#1DB954", "Apple Music": "#F52F45", "YouTube": "#FF0000"},
+            color_discrete_map={"Spotify": "#1DB954", "Apple Music": "#F52F45", "YouTube": "#FF0000", "Amazon": "#232F3E"},
         )
 
         fig.update_traces(
