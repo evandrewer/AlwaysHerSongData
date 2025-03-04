@@ -51,9 +51,16 @@ song_data = songdata()
 st.title("Always Her Streaming Stats")
 
 st.sidebar.header("Select Data Sources")
+source_mapping = {
+    "Spotify": "spotify",
+    "Apple Music": "apple",
+    "YouTube Music": "youtube",
+    "Amazon Music": "amazon"
+}
+
 selected_sources = st.sidebar.multiselect(
     "Choose Streaming Data:",
-    options=["Spotify", "Apple Music", "YouTube Music", "Amazon Music"],
+    options=list(source_mapping.keys()),
     default=["Spotify", "Apple Music", "Amazon Music"]  # Default selection
 )
 
@@ -61,8 +68,8 @@ selected_sources = st.sidebar.multiselect(
 if not selected_sources:
     st.warning("Please select at least one streaming source.")
 else:
-    # Sum the selected sources
-    song_data["selected_streams"] = sum(song_data[source.lower().replace(" ", "_")] for source in selected_sources)
+    # Sum the selected sources using the correct variable names
+    song_data["selected_streams"] = sum(song_data[source_mapping[source]] for source in selected_sources)
 
 
 
