@@ -118,7 +118,7 @@ total_apple = song_data["apple"].sum()
 total_youtube = song_data["youtube"].sum()
 total_amazon = song_data["amazon"].sum()
 
-platforms = ["Spotify", "Apple Music", "YouTube", "Amazon"]
+platforms = ["Spotify", "Apple Music", "YouTube", "Amazon Music"]
 stream_counts = [total_spotify, total_apple, total_youtube, total_amazon]
 
 
