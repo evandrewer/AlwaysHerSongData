@@ -50,26 +50,20 @@ song_data = songdata()
 
 st.title("Always Her Streaming Stats")
 
-st.sidebar.header("Select Data Source")
-data_source = st.sidebar.radio(
+st.sidebar.header("Select Data Sources")
+selected_sources = st.sidebar.multiselect(
     "Choose Streaming Data:",
-    options=["Spotify Only", "Apple Music Only", "YouTube Music Only", "Amazon Music Only", "All (Summed)", "All but YouTube"],
-    index=5  # Default selection: Spotify Only
+    options=["Spotify", "Apple Music", "YouTube Music", "Amazon Music"],
+    default=["Spotify", "Apple Music", "Amazon Music"]  # Default selection
 )
 
-# Modify the dataframe based on selection
-if data_source == "Spotify Only":
-    song_data["selected_streams"] = song_data["spotify"]  # Spotify data
-elif data_source == "Apple Music Only":
-    song_data["selected_streams"] = song_data["apple"]  # Apple Music data
-elif data_source == "YouTube Music Only":
-    song_data["selected_streams"] = song_data["youtube"]  # YouTube Music data
-elif data_source == "Amazon Music Only":
-    song_data["selected_streams"] = song_data["amazon"]  # Amazon Music data
-elif data_source == "All (Summed)":
-    song_data["selected_streams"] = song_data["spotify"] + song_data["apple"] + song_data["youtube"] + song_data["amazon"] # Sum of all
-elif data_source == "All but YouTube":
-    song_data["selected_streams"] = song_data["spotify"] + song_data["apple"] + song_data["amazon"] # Sum of all minus YouTube
+# Ensure at least one source is selected
+if not selected_sources:
+    st.warning("Please select at least one streaming source.")
+else:
+    # Sum the selected sources
+    song_data["selected_streams"] = sum(song_data[source.lower().replace(" ", "_")] for source in selected_sources)
+
 
 
 # Song selection multiselect
