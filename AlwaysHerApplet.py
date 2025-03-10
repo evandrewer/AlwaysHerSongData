@@ -438,7 +438,9 @@ with tab1:
     with tab3:
         selected_song = st.selectbox("Select a Song:", song_data2["song"].unique())
 
-        first_stream_date = song_data2[song_data2["song"] == selected_song]["date"].min()
+        first_stream_date = (
+            song_data2[(song_data2["song"] == selected_song) & (song_data2["selected_streams"] > 0)]["date"].min()
+        )
 
         start_date, end_date = st.date_input(
             "Select Date Range:",
