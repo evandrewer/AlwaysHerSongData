@@ -448,3 +448,37 @@ with tab1:
             min_value=song_data2["date"].min(),
             max_value=song_data2["date"].max()
         )
+
+
+        filtered_data2 = song_data2[
+            (song_data2["song"] == selected_song) & 
+            (song_data2["date"] >= start_date) & 
+            (song_data2["date"] <= end_date)
+        ]
+
+        # Sum streams from each platform within the date range
+        stream_sums = {
+            "Spotify": filtered_data2["spotify"].sum(),
+            "Apple Music": filtered_data2["apple"].sum(),
+            "YouTube Music": filtered_data2["youtube"].sum(),
+            "Amazon Music": filtered_data2["amazon"].sum()
+        }
+
+        # Remove platforms with zero streams to avoid empty slices
+        stream_sums = {k: v for k, v in stream_sums.items() if v > 0}
+
+        # Create the pie chart
+        fig = px.pie(
+            names=stream_sums.keys(),
+            values=stream_sums.values(),
+            title=f"Stream Distribution for {selected_song} ({start_date} to {end_date})",
+            color_discrete_map={
+                "Spotify": "#1DB954",
+                "Apple Music": "#FA243C",
+                "YouTube Music": "#FF0000",
+                "Amazon Music": "#FF9900"  # You can tweak this hex color if needed
+            }
+        )
+
+        # Display chart in Streamlit
+        st.plotly_chart(fig)
