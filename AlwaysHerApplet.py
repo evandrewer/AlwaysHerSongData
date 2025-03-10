@@ -443,6 +443,6 @@ with tab1:
         start_date, end_date = st.date_input(
             "Select Date Range:",
             value=[first_stream_date, song_data["date"].max()],
-            min_value=song_data["date"].min(),
-            max_value=song_data["date"].max()
+            min_value=song_data2["date"].min(),
+            max_value=song_data2["date"].max()
         )
