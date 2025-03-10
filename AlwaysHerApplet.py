@@ -435,7 +435,7 @@ with tab1:
 
 
     with tab3:
-        st.write("Unique Songs:", song_data["song"].unique())
+        st.write(song_data)
 
         selected_song = st.selectbox("Select a Song:", song_data["song"].unique())
 
