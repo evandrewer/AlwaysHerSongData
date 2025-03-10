@@ -449,6 +449,8 @@ with tab1:
             max_value=song_data2["date"].max()
         )
 
+        start_date = pd.to_datetime(start_date)
+        end_date = pd.to_datetime(end_date)
 
         filtered_data2 = song_data2[
             (song_data2["song"] == selected_song) & 
