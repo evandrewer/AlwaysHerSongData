@@ -47,6 +47,7 @@ def songdata(show_spinner=True):
 # App code
 
 song_data = songdata()
+song_data2 = song_data
 
 st.title("Always Her Streaming Stats")
 
@@ -435,7 +436,7 @@ with tab1:
 
 
     with tab3:
-        st.write(song_data)
+        st.write(song_data2)
 
         selected_song = st.selectbox("Select a Song:", song_data["song"].unique())
 
