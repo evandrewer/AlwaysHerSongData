@@ -474,6 +474,15 @@ with tab1:
             "Streams": stream_sums.values()
         })
 
+        total_streams = sum(stream_sums.values())
+
+        # Add custom labels showing both percentage and total streams
+        stream_df["label_text"] = stream_df.apply(
+            lambda row: f"{(row['Streams'] / total_streams) * 100:.1f}%\n({row['Streams']:,})", 
+            axis=1
+        )
+
+        # Create the Plotly pie chart
         fig = px.pie(
             stream_df,
             names="Platform",
@@ -483,10 +492,17 @@ with tab1:
             color_discrete_map={
                 "Spotify": "#1DB954",
                 "Apple Music": "#F52F45",
-                "YouTube": "#FF0000",
+                "YouTube Music": "#FF0000",
                 "Amazon Music": "#25D1DA"
-            }
+            },
         )
 
-        # Display chart in Streamlit
+        # Display labels directly on the pie chart
+        fig.update_traces(
+            text=stream_df["label_text"],  # Show both percentage & total streams
+            textinfo="text",  # Display custom labels directly
+            hoverinfo="skip"  # Disable hover text
+        )
+
+        # Display the plot in Streamlit
         st.plotly_chart(fig)
