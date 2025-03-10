@@ -492,7 +492,7 @@ with tab1:
             color_discrete_map={
                 "Spotify": "#1DB954",
                 "Apple Music": "#F52F45",
-                "YouTube Music": "#FF0000",
+                "YouTube": "#FF0000",
                 "Amazon Music": "#25D1DA"
             },
         )
