@@ -473,13 +473,8 @@ with tab1:
         fig = px.pie(
             names=stream_sums.keys(),
             values=stream_sums.values(),
-            title=f"Stream Distribution for {selected_song} ({start_date} to {end_date})",
-            color_discrete_map={
-                "Spotify": "#1DB954",
-                "Apple Music": "#FA243C",
-                "YouTube Music": "#FF0000",
-                "Amazon Music": "#FF9900"  # You can tweak this hex color if needed
-            }
+            title=f"Stream Distribution for {selected_song} ({start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')})",
+            color_discrete_map={"Spotify": "#1DB954", "Apple Music": "#F52F45", "YouTube": "#FF0000", "Amazon Music": "#25D1DA"}
         )
 
         # Display chart in Streamlit
