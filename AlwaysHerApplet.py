@@ -153,7 +153,7 @@ growth_rate_per_song = (data_by_song.dropna(subset=['growth_rate'])
 
 
 
-tab1, tab2 = st.tabs(['General Stats', 'Stream Breakdowns'])
+tab1, tab2, tab3 = st.tabs(['General Stats', 'Stream Breakdowns', 'Song Comparisons'])
 
 with tab1:
 
@@ -431,3 +431,18 @@ with tab1:
         plt.tight_layout()
 
         st.pyplot(fig)
+
+
+
+    with tab3:
+
+        selected_song = st.selectbox("Select a Song:", song_data["song"].unique())
+
+        first_stream_date = song_data[song_data["song"] == selected_song]["date"].min()
+
+        start_date, end_date = st.date_input(
+            "Select Date Range:",
+            value=[first_stream_date, song_data["date"].max()],
+            min_value=song_data["date"].min(),
+            max_value=song_data["date"].max()
+        )
