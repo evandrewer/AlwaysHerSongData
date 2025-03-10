@@ -462,7 +462,7 @@ with tab1:
         stream_sums = {
             "Spotify": filtered_data2["spotify"].sum(),
             "Apple Music": filtered_data2["apple"].sum(),
-            "YouTube Music": filtered_data2["youtube"].sum(),
+            "YouTube": filtered_data2["youtube"].sum(),
             "Amazon Music": filtered_data2["amazon"].sum()
         }
 
