@@ -469,12 +469,23 @@ with tab1:
         # Remove platforms with zero streams to avoid empty slices
         stream_sums = {k: v for k, v in stream_sums.items() if v > 0}
 
-        # Create the pie chart
+        stream_df = pd.DataFrame({
+            "Platform": stream_sums.keys(),
+            "Streams": stream_sums.values()
+        })
+
         fig = px.pie(
-            names=stream_sums.keys(),
-            values=stream_sums.values(),
+            stream_df,
+            names="Platform",
+            values="Streams",
             title=f"Stream Distribution for {selected_song} ({start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')})",
-            color_discrete_map={"Spotify": "#1DB954", "Apple Music": "#F52F45", "YouTube": "#FF0000", "Amazon Music": "#25D1DA"}
+            color="Platform",
+            color_discrete_map={
+                "Spotify": "#1DB954",
+                "Apple Music": "#F52F45",
+                "YouTube Music": "#FF0000",
+                "Amazon Music": "#25D1DA"
+            }
         )
 
         # Display chart in Streamlit
