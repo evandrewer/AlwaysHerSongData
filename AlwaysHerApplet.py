@@ -523,7 +523,7 @@ with tab1:
                 stream_df,
                 names="Platform",
                 values="Streams",
-                title=f"Stream Distribution for {selected_song}\n({start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')})",
+                title=f"Stream Distribution for {selected_song}",
                 color="Platform",
                 color_discrete_map={
                     "Spotify": "#1DB954",
