@@ -533,6 +533,21 @@ with tab1:
                 },
             )
 
+            # subtitle
+            fig.add_annotation(
+                text=f"({start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')})",
+                y=1.02,
+                x=0.9,
+                showarrow=False
+            )
+
+            # shrink legend and add margins
+            fig.update_layout(
+                margin=dict(t=30, b=0, l=80, r=0),
+                height=350,
+                width=350
+            )
+
             # Display labels directly on the pie chart
             fig.update_traces(
                 text=stream_df["label_text"],  # Show both percentage & total streams
