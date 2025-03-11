@@ -611,7 +611,7 @@ with tab1:
             # subtitle
             fig2.add_annotation(
                 text=f"({start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')})",
-                y=1.05,
+                y=1.09,
                 showarrow=False
             )
 
