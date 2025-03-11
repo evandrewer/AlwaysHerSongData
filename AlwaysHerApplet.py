@@ -594,7 +594,7 @@ with tab1:
             )
 
             # Create the Plotly pie chart
-            fig = px.pie(
+            fig2 = px.pie(
                 stream_df,
                 names="Platform",
                 values="Streams",
@@ -609,11 +609,11 @@ with tab1:
             )
 
             # Display labels directly on the pie chart
-            fig.update_traces(
+            fig2.update_traces(
                 text=stream_df["label_text"],  # Show both percentage & total streams
                 textinfo="text",  # Display custom labels directly
                 hoverinfo="skip"  # Disable hover text
             )
 
             # Display the plot in Streamlit
-            st.plotly_chart(fig)
+            st.plotly_chart(fig2)
