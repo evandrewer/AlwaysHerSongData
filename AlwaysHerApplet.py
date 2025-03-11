@@ -617,7 +617,6 @@ with tab1:
 
             # shrink legend and add margins
             fig2.update_layout(
-                margin=dict(t=0, b=0, l=0, r=0),
                 height=500,
                 width=500
             )
