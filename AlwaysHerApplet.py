@@ -611,13 +611,13 @@ with tab1:
             # subtitle
             fig2.add_annotation(
                 text=f"({start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')})",
-                y=1.05,
+                y=1,
                 showarrow=False
             )
 
             # shrink legend and add margins
             fig2.update_layout(
-                margin=dict(t=35, b=35, l=35, r=0)
+                margin=dict(t=0, b=0, l=35, r=0)
             )
 
             # Display labels directly on the pie chart
