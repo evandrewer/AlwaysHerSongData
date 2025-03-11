@@ -44,6 +44,36 @@ def songdata(show_spinner=True):
     return combined_songs
 
 
+# App font change
+
+st.markdown(
+    """
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+        
+        /* Change font for headers */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Verdana', sans-serif;
+        }
+
+        /* Change font for sidebar */
+        .sidebar .sidebar-content {
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Change font for plot titles and legends */
+        .plot-container {
+            font-family: 'Trebuchet MS', sans-serif;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+
+
 # App code
 
 song_data = songdata()
