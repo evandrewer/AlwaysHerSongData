@@ -617,8 +617,9 @@ with tab1:
 
             # shrink legend and add margins
             fig2.update_layout(
-                height=700,
-                width=700
+                margin=dict(t=30, b=0, l=40, r=0),
+                height=600,
+                width=600
             )
 
             # Display labels directly on the pie chart
