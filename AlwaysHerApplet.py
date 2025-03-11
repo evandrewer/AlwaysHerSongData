@@ -471,7 +471,7 @@ with tab1:
 
         with col1:
 
-            selected_song = st.selectbox("Select a Song:", song_data2["song"].unique())
+            selected_song = st.selectbox("Select a Song:", song_data2["song"].unique(), key='comp1')
 
             first_stream_date = (
                 song_data2[(song_data2["song"] == selected_song) & (song_data2["selected_streams"] > 0)]["date"].min()
@@ -545,7 +545,7 @@ with tab1:
 
         with col2:
 
-            selected_song2 = st.selectbox("Select a Song:", song_data2["song"].unique())
+            selected_song2 = st.selectbox("Select a Song:", song_data2["song"].unique(), key='comp2')
 
             first_stream_date2 = (
                 song_data2[(song_data2["song"] == selected_song2) & (song_data2["selected_streams"] > 0)]["date"].min()
