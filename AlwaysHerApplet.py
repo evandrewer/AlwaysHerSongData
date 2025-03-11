@@ -471,7 +471,7 @@ with tab1:
 
         with col1:
 
-            selected_song = st.selectbox("Select a Song:", song_data2["song"].unique(), key='comp1')
+            selected_song = st.selectbox("Select a Song:", song_data2["song"].unique(), key='song1')
 
             first_stream_date = (
                 song_data2[(song_data2["song"] == selected_song) & (song_data2["selected_streams"] > 0)]["date"].min()
@@ -482,7 +482,7 @@ with tab1:
                 value=[first_stream_date, song_data["date"].max()],
                 min_value=song_data2["date"].min(),
                 max_value=song_data2["date"].max(),
-                key='comp1'
+                key='date1'
             )
 
             start_date = pd.to_datetime(start_date)
@@ -546,7 +546,7 @@ with tab1:
 
         with col2:
 
-            selected_song2 = st.selectbox("Select a Song:", song_data2["song"].unique(), key='comp2')
+            selected_song2 = st.selectbox("Select a Song:", song_data2["song"].unique(), key='song2')
 
             first_stream_date2 = (
                 song_data2[(song_data2["song"] == selected_song2) & (song_data2["selected_streams"] > 0)]["date"].min()
@@ -557,7 +557,7 @@ with tab1:
                 value=[first_stream_date2, song_data["date"].max()],
                 min_value=song_data2["date"].min(),
                 max_value=song_data2["date"].max(),
-                key = 'comp2'
+                key = 'date2'
             )
 
             start_date = pd.to_datetime(start_date)
