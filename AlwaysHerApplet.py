@@ -541,7 +541,7 @@ with tab1:
             )
 
             # Display the plot in Streamlit
-            st.plotly_chart(fig)
+            st.plotly_chart(fig, key='plot1')
 
 
         with col2:
@@ -598,14 +598,19 @@ with tab1:
                 stream_df,
                 names="Platform",
                 values="Streams",
-                title=f"Stream Distribution for {selected_song2}\n({start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')})",
+                title=f"Stream Distribution for {selected_song2}",
                 color="Platform",
                 color_discrete_map={
                     "Spotify": "#1DB954",
                     "Apple Music": "#F52F45",
                     "YouTube": "#FF0000",
                     "Amazon Music": "#25D1DA"
-                },
+                }
+            )
+
+            # subtitle
+            fig2.add_annotation(
+                text=f"({start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')})"
             )
 
             # Display labels directly on the pie chart
@@ -616,4 +621,4 @@ with tab1:
             )
 
             # Display the plot in Streamlit
-            st.plotly_chart(fig2)
+            st.plotly_chart(fig2, key='plot2')
