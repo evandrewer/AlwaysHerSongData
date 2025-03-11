@@ -467,10 +467,10 @@ with tab1:
 
     with tab3:
 
-        col1, col2 = st.col([1,1])
+        col1, col2 = st.columns([1,1])
 
         with col1:
-            
+
             selected_song = st.selectbox("Select a Song:", song_data2["song"].unique())
 
             first_stream_date = (
