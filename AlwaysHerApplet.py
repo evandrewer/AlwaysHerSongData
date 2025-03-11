@@ -522,7 +522,81 @@ with tab1:
                 stream_df,
                 names="Platform",
                 values="Streams",
-                title=f"Stream Distribution for {selected_song} ({start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')})",
+                title=f"Stream Distribution for {selected_song}\n({start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')})",
+                color="Platform",
+                color_discrete_map={
+                    "Spotify": "#1DB954",
+                    "Apple Music": "#F52F45",
+                    "YouTube": "#FF0000",
+                    "Amazon Music": "#25D1DA"
+                },
+            )
+
+            # Display labels directly on the pie chart
+            fig.update_traces(
+                text=stream_df["label_text"],  # Show both percentage & total streams
+                textinfo="text",  # Display custom labels directly
+                hoverinfo="skip"  # Disable hover text
+            )
+
+            # Display the plot in Streamlit
+            st.plotly_chart(fig)
+
+
+        with col2:
+
+            selected_song2 = st.selectbox("Select a Song:", song_data2["song"].unique())
+
+            first_stream_date2 = (
+                song_data2[(song_data2["song"] == selected_song2) & (song_data2["selected_streams"] > 0)]["date"].min()
+            )
+
+            start_date, end_date = st.date_input(
+                "Select Date Range:",
+                value=[first_stream_date2, song_data["date"].max()],
+                min_value=song_data2["date"].min(),
+                max_value=song_data2["date"].max()
+            )
+
+            start_date = pd.to_datetime(start_date)
+            end_date = pd.to_datetime(end_date)
+
+            filtered_data2 = song_data2[
+                (song_data2["song"] == selected_song2) & 
+                (song_data2["date"] >= start_date) & 
+                (song_data2["date"] <= end_date)
+            ]
+
+            # Sum streams from each platform within the date range
+            stream_sums = {
+                "Spotify": filtered_data2["spotify"].sum(),
+                "Apple Music": filtered_data2["apple"].sum(),
+                "YouTube": filtered_data2["youtube"].sum(),
+                "Amazon Music": filtered_data2["amazon"].sum()
+            }
+
+            # Remove platforms with zero streams to avoid empty slices
+            stream_sums = {k: v for k, v in stream_sums.items() if v > 0}
+
+            stream_df = pd.DataFrame({
+                "Platform": stream_sums.keys(),
+                "Streams": stream_sums.values()
+            })
+
+            total_streams = sum(stream_sums.values())
+
+            # Add custom labels showing both percentage and total streams
+            stream_df["label_text"] = stream_df.apply(
+                lambda row: f"{(row['Streams'] / total_streams) * 100:.1f}%\n({row['Streams']:,})", 
+                axis=1
+            )
+
+            # Create the Plotly pie chart
+            fig = px.pie(
+                stream_df,
+                names="Platform",
+                values="Streams",
+                title=f"Stream Distribution for {selected_song2}\n({start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')})",
                 color="Platform",
                 color_discrete_map={
                     "Spotify": "#1DB954",
