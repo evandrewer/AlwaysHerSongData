@@ -518,6 +518,10 @@ with tab1:
                 axis=1
             )
 
+
+            # ADD OTHER STATS HERE
+
+
             # Create the Plotly pie chart
             fig = px.pie(
                 stream_df,
@@ -607,6 +611,10 @@ with tab1:
                 lambda row: f"{(row['Streams'] / total_streams) * 100:.1f}%\n({row['Streams']:,})", 
                 axis=1
             )
+
+
+             # ADD OTHER STATS HERE
+
 
             # Create the Plotly pie chart
             fig2 = px.pie(
