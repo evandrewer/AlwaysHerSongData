@@ -467,7 +467,7 @@ with tab1:
 
     with tab3:
 
-        col1 = st.columns([1])
+        col1 = st.columns([1])[0]
 
         with col1:
 
