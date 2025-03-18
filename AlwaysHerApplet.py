@@ -469,24 +469,21 @@ with tab1:
 
         col1, col2 = st.columns([1,1])
 
+        start_date, end_date = st.date_input(
+            "Select Date Range:",
+            value=[song_data["date"].max() - 28, song_data["date"].max()],
+            min_value=song_data2["date"].min(),
+            max_value=song_data2["date"].max(),
+            key='date1'
+        )
+
+        start_date = pd.to_datetime(start_date)
+        end_date = pd.to_datetime(end_date)
+
+
         with col1:
 
             selected_song = st.selectbox("Select a Song:", song_data2["song"].unique(), key='song1')
-
-            first_stream_date = (
-                song_data2[(song_data2["song"] == selected_song) & (song_data2["selected_streams"] > 0)]["date"].min()
-            )
-
-            start_date, end_date = st.date_input(
-                "Select Date Range:",
-                value=[first_stream_date, song_data["date"].max()],
-                min_value=song_data2["date"].min(),
-                max_value=song_data2["date"].max(),
-                key='date1'
-            )
-
-            start_date = pd.to_datetime(start_date)
-            end_date = pd.to_datetime(end_date)
 
             filtered_data2 = song_data2[
                 (song_data2["song"] == selected_song) & 
@@ -567,20 +564,6 @@ with tab1:
 
             selected_song2 = st.selectbox("Select a Song:", song_data2["song"].unique(), key='song2')
 
-            first_stream_date2 = (
-                song_data2[(song_data2["song"] == selected_song2) & (song_data2["selected_streams"] > 0)]["date"].min()
-            )
-
-            start_date, end_date = st.date_input(
-                "Select Date Range:",
-                value=[first_stream_date2, song_data["date"].max()],
-                min_value=song_data2["date"].min(),
-                max_value=song_data2["date"].max(),
-                key = 'date2'
-            )
-
-            start_date = pd.to_datetime(start_date)
-            end_date = pd.to_datetime(end_date)
 
             filtered_data2 = song_data2[
                 (song_data2["song"] == selected_song2) & 
