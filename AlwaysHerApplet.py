@@ -529,7 +529,7 @@ with tab1:
                 stream_df,
                 names="Platform",
                 values="Streams",
-                title=f"Stream Distribution for {selected_song}",
+                title=f"Stream Sources for {selected_song}",
                 color="Platform",
                 color_discrete_map={
                     "Spotify": "#1DB954",
@@ -609,7 +609,7 @@ with tab1:
                 stream_df,
                 names="Platform",
                 values="Streams",
-                title=f"Stream Distribution for {selected_song2}",
+                title=f"Stream Sources for {selected_song2}",
                 color="Platform",
                 color_discrete_map={
                     "Spotify": "#1DB954",
