@@ -467,21 +467,26 @@ with tab1:
 
     with tab3:
 
-        col1, col2 = st.columns([1,1])
-
-        start_date, end_date = st.date_input(
-            "Select Date Range:",
-            value=[song_data["date"].max() - timedelta(days=28), song_data["date"].max()],
-            min_value=song_data2["date"].min(),
-            max_value=song_data2["date"].max(),
-            key='date1'
-        )
-
-        start_date = pd.to_datetime(start_date)
-        end_date = pd.to_datetime(end_date)
-
+        col1 = st.columns([0])
 
         with col1:
+
+            start_date, end_date = st.date_input(
+                "Select Date Range:",
+                value=[song_data["date"].max() - timedelta(days=28), song_data["date"].max()],
+                min_value=song_data2["date"].min(),
+                max_value=song_data2["date"].max(),
+                key='date1'
+            )
+
+            start_date = pd.to_datetime(start_date)
+            end_date = pd.to_datetime(end_date)
+
+
+        col2, col3 = st.columns([1,1])
+
+
+        with col2:
 
             selected_song = st.selectbox("Select a Song:", song_data2["song"].unique(), key='song1')
 
@@ -560,7 +565,7 @@ with tab1:
             st.plotly_chart(fig, key='plot1')
 
 
-        with col2:
+        with col3:
 
             selected_song2 = st.selectbox("Select a Song:", song_data2["song"].unique(), key='song2')
 
