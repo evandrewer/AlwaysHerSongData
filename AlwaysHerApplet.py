@@ -567,7 +567,7 @@ with tab1:
 
         with col3:
 
-            selected_song2 = st.selectbox("Select a Song:", song_data2["song"].unique(), key='song2')
+            selected_song2 = st.selectbox("Select a Song:", song_data2["song"].unique(), key='song2', index = 1)
 
 
             filtered_data2 = song_data2[
