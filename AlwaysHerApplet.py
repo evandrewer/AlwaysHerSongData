@@ -471,7 +471,7 @@ with tab1:
 
         start_date, end_date = st.date_input(
             "Select Date Range:",
-            value=[song_data["date"].max() - 28, song_data["date"].max()],
+            value=[song_data["date"].max() - timedelta(days=28), song_data["date"].max()],
             min_value=song_data2["date"].min(),
             max_value=song_data2["date"].max(),
             key='date1'
