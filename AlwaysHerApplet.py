@@ -147,24 +147,6 @@ grand_total = song_summary["Streams"].sum()
 
 min_valid_date = song_data[song_data[["spotify", "apple", "youtube", "amazon"]].sum(axis=1) > 0]["date"].min()
 
-start_date_t1, end_date_t1 = st.date_input(
-    "Select Date Range:",
-    value=[min_valid_date, song_data["date"].max()],  # Default to full range
-    min_value=min_valid_date,
-    max_value=song_data["date"].max()
-)
-
-filtered_data_pie = song_data[(song_data["date"] >= pd.to_datetime(start_date_t1)) & 
-                          (song_data["date"] <= pd.to_datetime(end_date_t1))]
-
-total_spotify = filtered_data_pie["spotify"].sum()
-total_apple = filtered_data_pie["apple"].sum()
-total_youtube = filtered_data_pie["youtube"].sum()
-total_amazon = filtered_data_pie["amazon"].sum()
-
-platforms = ["Spotify", "Apple Music", "YouTube", "Amazon Music"]
-stream_counts = [total_spotify, total_apple, total_youtube, total_amazon]
-
 
 # For tab1, col3
 scatter_data = song_summary.copy()
@@ -212,6 +194,25 @@ with tab1:
     col2 = st.columns([1])[0]
 
     with col2:
+
+        start_date_t1, end_date_t1 = st.date_input(
+            "Select Date Range:",
+            value=[min_valid_date, song_data["date"].max()],  # Default to full range
+            min_value=min_valid_date,
+            max_value=song_data["date"].max()
+        )
+
+        filtered_data_pie = song_data[(song_data["date"] >= pd.to_datetime(start_date_t1)) & 
+                                (song_data["date"] <= pd.to_datetime(end_date_t1))]
+
+        total_spotify = filtered_data_pie["spotify"].sum()
+        total_apple = filtered_data_pie["apple"].sum()
+        total_youtube = filtered_data_pie["youtube"].sum()
+        total_amazon = filtered_data_pie["amazon"].sum()
+
+        platforms = ["Spotify", "Apple Music", "YouTube", "Amazon Music"]
+        stream_counts = [total_spotify, total_apple, total_youtube, total_amazon]
+
 
         fig = px.pie(
             names=platforms,
