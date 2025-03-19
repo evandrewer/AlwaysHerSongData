@@ -92,7 +92,7 @@ source_mapping = {
 selected_sources = st.sidebar.multiselect(
     "Choose Streaming Data:",
     options=list(source_mapping.keys()),
-    default=["Spotify", "Apple Music", "Amazon Music"]  # Default selection
+    default=["Spotify", "Apple Music", "YouTube Music", "Amazon Music"]  # Default selection
 )
 
 # Ensure at least one source is selected
