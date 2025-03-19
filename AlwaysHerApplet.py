@@ -145,10 +145,22 @@ grand_total = song_summary["Streams"].sum()
 
 # For tab1, col2
 
-total_spotify = song_data["spotify"].sum()
-total_apple = song_data["apple"].sum()
-total_youtube = song_data["youtube"].sum()
-total_amazon = song_data["amazon"].sum()
+min_valid_date = song_data[song_data[["spotify", "apple", "youtube", "amazon"]].sum(axis=1) > 0]["date"].min()
+
+start_date_t1, end_date_t1 = st.date_input(
+    "Select Date Range:",
+    value=[min_valid_date, song_data["date"].max()],  # Default to full range
+    min_value=min_valid_date,
+    max_value=song_data["date"].max()
+)
+
+filtered_data_pie = song_data[(song_data["date"] >= pd.to_datetime(start_date_t1)) & 
+                          (song_data["date"] <= pd.to_datetime(end_date_t1))]
+
+total_spotify = filtered_data_pie["spotify"].sum()
+total_apple = filtered_data_pie["apple"].sum()
+total_youtube = filtered_data_pie["youtube"].sum()
+total_amazon = filtered_data_pie["amazon"].sum()
 
 platforms = ["Spotify", "Apple Music", "YouTube", "Amazon Music"]
 stream_counts = [total_spotify, total_apple, total_youtube, total_amazon]
@@ -204,16 +216,22 @@ with tab1:
         fig = px.pie(
             names=platforms,
             values=stream_counts,
-            title="Proportion of Total Streams by Platform",
+            title=f"Proportion of Streams by Platform ({start_date_t1} to {end_date_t1})",
             color=platforms,
-            color_discrete_map={"Spotify": "#1DB954", "Apple Music": "#F52F45", "YouTube": "#FF0000", "Amazon Music": "#25D1DA"}
+            color_discrete_map={
+                "Spotify": "#1DB954", 
+                "Apple Music": "#F52F45", 
+                "YouTube": "#FF0000", 
+                "Amazon Music": "#25D1DA"
+            }
         )
 
-        fig.update_traces(
-            hoverinfo="skip"  # Disable hover text
-        )
-        
+        # Disable hover text
+        fig.update_traces(hoverinfo="skip")
+
+        # Display chart
         st.plotly_chart(fig)
+
 
     col3 = st.columns([1])[0]
 
