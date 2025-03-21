@@ -419,7 +419,7 @@ with tab1:
         st.pyplot(fig)
 
 
-    # CUMU WEEKLY STREAMS CHART
+    # CUMU WEEKLY STREAMS CHART :)
 
         st.subheader("Cumulative Weekly Stream Counts")
 
