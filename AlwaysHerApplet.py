@@ -23,6 +23,7 @@ def songdata(show_spinner=True):
     itb_acous = pd.read_csv("In the Beginning - Acoustic-timeline.csv")
     erberger_acous = pd.read_csv("Airport Girl - Acoustic-timeline.csv")
     timeless = pd.read_csv("Timeless-timeline.csv")
+    backnforth = pd.read_csv("Back & Forth-timeline.csv")
 
     silhouette['song'] = 'Silhouette'
     itb['song'] = 'In the Beginning'
@@ -35,9 +36,10 @@ def songdata(show_spinner=True):
     itb_acous['song'] = 'In the Beginning - Acoustic'
     erberger_acous['song'] = 'Airport Girl - Acoustic'
     timeless['song'] = 'Timeless'
+    backnforth['song'] = 'Back & Forth'
 
     combined_songs = pd.concat([silhouette, itb, erberger, mr_nice_guy, my_brain,
-                            olay, prolly_nun, savior, itb_acous, erberger_acous, timeless])
+                            olay, prolly_nun, savior, itb_acous, erberger_acous, timeless, backnforth])
 
     combined_songs['date'] = pd.to_datetime(combined_songs['date'])
 
@@ -86,13 +88,14 @@ source_mapping = {
     "Spotify": "spotify",
     "Apple Music": "apple",
     "YouTube Music": "youtube",
-    "Amazon Music": "amazon"
+    "Amazon Music": "amazon",
+    "Other": "other"
 }
 
 selected_sources = st.sidebar.multiselect(
     "Choose Streaming Data:",
     options=list(source_mapping.keys()),
-    default=["Spotify", "Apple Music", "YouTube Music", "Amazon Music"]  # Default selection
+    default=["Spotify", "Apple Music", "YouTube Music", "Amazon Music", "Other"]  # Default selection
 )
 
 # Ensure at least one source is selected
@@ -108,7 +111,8 @@ else:
 song_titles = ['Silhouette', 'In the Beginning', 'Airport Girl', 'Mr. Nice Guy', 
                'My Brain is Carrying the World', 'One Look At You - Acoustic',
                'Probably Nothing - Acoustic', 'Savior - Acoustic',
-               'In the Beginning - Acoustic', 'Airport Girl - Acoustic', 'Timeless']
+               'In the Beginning - Acoustic', 'Airport Girl - Acoustic', 'Timeless',
+               'Back & Forth']
 
 selected_songs = st.sidebar.multiselect(
     "Select Songs", options=song_titles, default=song_titles)
@@ -118,7 +122,7 @@ data_by_song = song_data[song_data['song'].isin(selected_songs)]
 
 
 # Color dictionary
-num_songs = 11 
+num_songs = 12 
 tab20_colors = plt.cm.get_cmap("tab20", num_songs)
 
 color_dict = {song: tab20_colors(i) for i, song in enumerate(song_titles)}
@@ -145,7 +149,7 @@ grand_total = song_summary["Streams"].sum()
 
 # For tab1, col2
 
-min_valid_date = song_data[song_data[["spotify", "apple", "youtube", "amazon"]].sum(axis=1) > 0]["date"].min()
+min_valid_date = song_data[song_data[["spotify", "apple", "youtube", "amazon", "other"]].sum(axis=1) > 0]["date"].min()
 
 
 # For tab1, col3
@@ -218,7 +222,7 @@ with tab1:
         total_youtube = filtered_data_pie["youtube"].sum()
         total_amazon = filtered_data_pie["amazon"].sum()
 
-        platforms = ["Spotify", "Apple Music", "YouTube", "Amazon Music"]
+        platforms = ["Spotify", "Apple Music", "YouTube", "Amazon Music", "Other"]
         stream_counts = [total_spotify, total_apple, total_youtube, total_amazon]
 
 
@@ -231,7 +235,8 @@ with tab1:
                 "Spotify": "#1DB954", 
                 "Apple Music": "#F52F45", 
                 "YouTube": "#FF0000", 
-                "Amazon Music": "#25D1DA"
+                "Amazon Music": "#25D1DA",
+                "Other": "808080"
             }
         )
 
@@ -287,6 +292,8 @@ with tab1:
                      
                 The 10-day average stream proportion is calculated by taking the proportion of streams for each 
                 song each day for 10 days, and averaging across days.
+                     
+                The "Other" selection includes the following services: Pandora, Deezer, and Boomplay.
                     """)
 
 
@@ -528,7 +535,8 @@ with tab1:
                 "Spotify": filtered_data2["spotify"].sum(),
                 "Apple Music": filtered_data2["apple"].sum(),
                 "YouTube": filtered_data2["youtube"].sum(),
-                "Amazon Music": filtered_data2["amazon"].sum()
+                "Amazon Music": filtered_data2["amazon"].sum(),
+                "Other": filtered_data2["other"].sum()
             }
 
             # Remove platforms with zero streams to avoid empty slices
@@ -562,7 +570,8 @@ with tab1:
                     "Spotify": "#1DB954",
                     "Apple Music": "#F52F45",
                     "YouTube": "#FF0000",
-                    "Amazon Music": "#25D1DA"
+                    "Amazon Music": "#25D1DA",
+                    "Other": "808080"
                 },
             )
 
@@ -608,7 +617,8 @@ with tab1:
                 "Spotify": filtered_data2["spotify"].sum(),
                 "Apple Music": filtered_data2["apple"].sum(),
                 "YouTube": filtered_data2["youtube"].sum(),
-                "Amazon Music": filtered_data2["amazon"].sum()
+                "Amazon Music": filtered_data2["amazon"].sum(),
+                "Other": filtered_data2["other"].sum()
             }
 
             # Remove platforms with zero streams to avoid empty slices
@@ -642,7 +652,8 @@ with tab1:
                     "Spotify": "#1DB954",
                     "Apple Music": "#F52F45",
                     "YouTube": "#FF0000",
-                    "Amazon Music": "#25D1DA"
+                    "Amazon Music": "#25D1DA",
+                    "Other": "808080"
                 }
             )
 
