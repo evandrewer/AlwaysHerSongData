@@ -122,7 +122,7 @@ data_by_song = song_data[song_data['song'].isin(selected_songs)]
 
 
 # Color dictionary
-num_songs = 12 
+num_songs = 11
 tab20_colors = plt.cm.get_cmap("tab20", num_songs)
 
 color_dict = {song: tab20_colors(i) for i, song in enumerate(song_titles)}
