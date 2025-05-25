@@ -142,7 +142,7 @@ song_summary = (data_by_song[data_by_song['selected_streams'] > 0]
 
 song_summary["Release_Date"] = pd.to_datetime(song_summary["Release_Date"])
 today = pd.to_datetime("today")
-song_summary["Days"] = (today - song_summary["Release_Date"]).dt.days
+song_summary["Days"] = (today - song_summary["Release_Date"] - 1).dt.days # Subtracting one to account for the current day, which streaming data has not arrived for yet
 
 song_summary["streams_per_day"] = song_summary["Streams"] / song_summary["Days"]
 
