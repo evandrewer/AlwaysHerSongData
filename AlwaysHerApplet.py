@@ -204,7 +204,7 @@ with tab1:
         st.subheader("Total Streams & Days Since Release")
         song_summary = song_summary.rename(columns={'song': 'Song', 'Days': 'Days Since Release', 'streams_per_day': 'Streams Per Day' })
         song_summary_col1 = song_summary.drop(columns='Release_Date')
-        st.data_editor(song_summary_col1, hide_index=True, use_container_width=True, height=452)
+        st.data_editor(song_summary_col1, hide_index=True, use_container_width=True, height=456)
         st.write(f"**Grand Total Streams**: {grand_total}")
 
     col2 = st.columns([1])[0]
@@ -286,7 +286,7 @@ with tab1:
     with col4:
         st.subheader("10-day Moving Growth Rate and Avg Stream Proportion")
         growth_rate_per_song = growth_rate_per_song.rename(columns={'song': 'Song', 'growth_rate': 'Growth Rate %', 'avg_10_day_proportion': 'Average Proportion %'})
-        st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 423)
+        st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 456)
 
         with st.expander("See explanation"):
             st.write("""
