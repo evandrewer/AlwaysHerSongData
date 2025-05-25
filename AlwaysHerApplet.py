@@ -221,9 +221,10 @@ with tab1:
         total_apple = filtered_data_pie["apple"].sum()
         total_youtube = filtered_data_pie["youtube"].sum()
         total_amazon = filtered_data_pie["amazon"].sum()
+        total_other = filtered_data_pie["other"].sum()
 
         platforms = ["Spotify", "Apple Music", "YouTube", "Amazon Music", "Other"]
-        stream_counts = [total_spotify, total_apple, total_youtube, total_amazon]
+        stream_counts = [total_spotify, total_apple, total_youtube, total_amazon, total_other]
 
 
         fig = px.pie(
