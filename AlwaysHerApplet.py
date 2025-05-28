@@ -305,15 +305,14 @@ with tab1:
 
     with tab2:
 
-        st.subheader("Average Daily Streams per Song")
-        view_option = st.radio("Select View", ["Daily Average Streams", "Weekly Average Streams"])
+        st.subheader("Total Streams")
+        view_option = st.radio("Select View", ["Daily Streams", "Weekly Streams"])
 
         earliest_release_date = song_summary["Release_Date"].min()
         filtered_data = data_by_song[data_by_song["date"] >= earliest_release_date].copy()
 
         daily_avg_streams = (filtered_data
                             .groupby("date")['selected_streams']
-                            .mean()
                             .reset_index()
                             .rename(columns={'selected_streams': "Daily Streams"}))
 
@@ -324,7 +323,7 @@ with tab1:
                             .rename(columns={"Daily Streams": "Weekly Streams"}))
 
         # Decide which data to plot based on the selected view option
-        if view_option == "Weekly Average Streams":
+        if view_option == "Weekly Streams":
             plot_data = weekly_avg_streams
             y_column = "Weekly Streams"
         else:
