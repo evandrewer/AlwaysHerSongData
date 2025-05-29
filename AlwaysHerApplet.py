@@ -313,6 +313,7 @@ with tab1:
 
         daily_avg_streams = (filtered_data
                             .groupby("date")['selected_streams']
+                            .sum()
                             .reset_index()
                             .rename(columns={'selected_streams': "Daily Streams"}))
 
