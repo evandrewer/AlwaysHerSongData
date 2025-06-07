@@ -24,6 +24,7 @@ def songdata(show_spinner=True):
     erberger_acous = pd.read_csv("Airport Girl - Acoustic-timeline.csv")
     timeless = pd.read_csv("Timeless-timeline.csv")
     backnforth = pd.read_csv("Back & Forth-timeline.csv")
+    mb8bit = pd.read_csv("My Brain is Carrying the World - 8-Bit Remix-timeline")
 
     silhouette['song'] = 'Silhouette'
     itb['song'] = 'In the Beginning'
@@ -37,9 +38,11 @@ def songdata(show_spinner=True):
     erberger_acous['song'] = 'Airport Girl - Acoustic'
     timeless['song'] = 'Timeless'
     backnforth['song'] = 'Back & Forth'
+    mb8bit['song'] = 'My Brain (8-bit)'
 
     combined_songs = pd.concat([silhouette, itb, erberger, mr_nice_guy, my_brain,
-                            olay, prolly_nun, savior, itb_acous, erberger_acous, timeless, backnforth])
+                            olay, prolly_nun, savior, itb_acous, erberger_acous, timeless, 
+                            backnforth, mb8bit])
 
     combined_songs['date'] = pd.to_datetime(combined_songs['date'])
 
@@ -112,7 +115,7 @@ song_titles = ['Silhouette', 'In the Beginning', 'Airport Girl', 'Mr. Nice Guy',
                'My Brain is Carrying the World', 'One Look At You - Acoustic',
                'Probably Nothing - Acoustic', 'Savior - Acoustic',
                'In the Beginning - Acoustic', 'Airport Girl - Acoustic', 'Timeless',
-               'Back & Forth']
+               'Back & Forth', 'My Brain (8-bit)']
 
 selected_songs = st.sidebar.multiselect(
     "Select Songs", options=song_titles, default=song_titles)
@@ -124,8 +127,8 @@ data_by_song = song_data[song_data['song'].isin(selected_songs)]
 # Color dictionary
 
 tab20 = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', 
-                '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
-                '#aec7e8', '#ffbb78'] #add tab20 green (light) next
+        '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
+        '#aec7e8', '#ffbb78', '#98df8a'] #add tab20 red (light) next
 
 tab20_colors = mcolors.ListedColormap(tab20)
 
@@ -204,7 +207,7 @@ with tab1:
         st.subheader("Total Streams & Days Since Release")
         song_summary = song_summary.rename(columns={'song': 'Song', 'Days': 'Days Since Release', 'streams_per_day': 'Streams Per Day' })
         song_summary_col1 = song_summary.drop(columns='Release_Date')
-        st.data_editor(song_summary_col1, hide_index=True, use_container_width=True, height=457)
+        st.data_editor(song_summary_col1, hide_index=True, use_container_width=True, height=491)
         st.write(f"**Grand Total Streams**: {grand_total}")
 
     col2 = st.columns([1])[0]
@@ -286,7 +289,7 @@ with tab1:
     with col4:
         st.subheader("10-day Moving Growth Rate and Avg Stream Proportion")
         growth_rate_per_song = growth_rate_per_song.rename(columns={'song': 'Song', 'growth_rate': 'Growth Rate %', 'avg_10_day_proportion': 'Average Proportion %'})
-        st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 457)
+        st.dataframe(growth_rate_per_song, hide_index=True, use_container_width=True, height = 491)
 
         with st.expander("See explanation"):
             st.write("""
