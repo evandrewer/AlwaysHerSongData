@@ -24,7 +24,7 @@ def songdata(show_spinner=True):
     erberger_acous = pd.read_csv("Airport Girl - Acoustic-timeline.csv")
     timeless = pd.read_csv("Timeless-timeline.csv")
     backnforth = pd.read_csv("Back & Forth-timeline.csv")
-    mb8bit = pd.read_csv("My Brain is Carrying the World - 8-Bit Remix-timeline")
+    mb8bit = pd.read_csv("My Brain is Carrying the World - 8-Bit Remix-timeline.csv")
 
     silhouette['song'] = 'Silhouette'
     itb['song'] = 'In the Beginning'
