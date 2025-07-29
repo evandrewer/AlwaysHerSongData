@@ -8,7 +8,7 @@ import matplotlib.colors as mcolors
 
 import streamlit as st
 
-#@st.cache_data
+@st.cache_data
 def songdata(show_spinner=True):
     st.cache_data.clear()
     
