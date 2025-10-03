@@ -119,7 +119,7 @@ song_titles = ['Silhouette', 'In the Beginning', 'Airport Girl', 'Mr. Nice Guy',
                'My Brain is Carrying the World', 'One Look At You - Acoustic',
                'Probably Nothing - Acoustic', 'Savior - Acoustic',
                'In the Beginning - Acoustic', 'Airport Girl - Acoustic', 'Timeless',
-               'Back & Forth', 'My Brain (8-bit)', 'Silhouette (8-bit), Obsessed']
+               'Back & Forth', 'My Brain (8-bit)', 'Silhouette (8-bit)', 'Obsessed']
 
 selected_songs = st.sidebar.multiselect(
     "Select Songs", options=song_titles, default=song_titles)
