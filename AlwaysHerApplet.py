@@ -18,8 +18,8 @@ def songdata(show_spinner=True):
     mr_nice_guy = pd.read_csv( "Mr. Nice Guy-timeline.csv")
     my_brain = pd.read_csv("My Brain is Carrying the World-timeline.csv")
     olay = pd.read_csv("One Look at You - Acoustic-timeline.csv")
-    prolly_nun = pd.read_csv("Probably Nothing - Acoustic-timeline.csv")
-    savior = pd.read_csv("Savior - Acoustic-timeline.csv")
+    prolly_nun_acous = pd.read_csv("Probably Nothing - Acoustic-timeline.csv")
+    savior_acous = pd.read_csv("Savior - Acoustic-timeline.csv")
     itb_acous = pd.read_csv("In the Beginning - Acoustic-timeline.csv")
     erberger_acous = pd.read_csv("Airport Girl - Acoustic-timeline.csv")
     timeless = pd.read_csv("Timeless-timeline.csv")
@@ -27,6 +27,14 @@ def songdata(show_spinner=True):
     mb8bit = pd.read_csv("My Brain is Carrying the World - 8-Bit Remix-timeline.csv")
     sil8bit = pd.read_csv("Silhouette (The Halloween Song) - 8-Bit Remix-timeline.csv")
     obsessed = pd.read_csv("Obsessed-timeline.csv")
+    incomplete = pd.read_csv("Incomplete-timeline.csv")
+    happy = pd.read_csv("Happy-timeline.csv")
+    lemmedown = pd.read_csv("Let Me Down-timeline.csv")
+    charade = pd.read_csv("Charade-timeline.csv")
+    friends = pd.read_csv("Friends-timeline.csv")
+    savior = pd.read_csv("Savior-timeline.csv")
+    prolly_nun = pd.read_csv("Probably Nothing-timeline.csv")
+
 
     silhouette['song'] = 'Silhouette'
     itb['song'] = 'In the Beginning'
@@ -34,8 +42,8 @@ def songdata(show_spinner=True):
     mr_nice_guy['song'] = 'Mr. Nice Guy'
     my_brain['song'] = 'My Brain is Carrying the World'
     olay['song'] = 'One Look At You - Acoustic'
-    prolly_nun['song'] = 'Probably Nothing - Acoustic'
-    savior['song'] = 'Savior - Acoustic'
+    prolly_nun_acous['song'] = 'Probably Nothing - Acoustic'
+    savior_acous['song'] = 'Savior - Acoustic'
     itb_acous['song'] = 'In the Beginning - Acoustic'
     erberger_acous['song'] = 'Airport Girl - Acoustic'
     timeless['song'] = 'Timeless'
@@ -43,10 +51,19 @@ def songdata(show_spinner=True):
     mb8bit['song'] = 'My Brain (8-bit)'
     sil8bit['song'] = 'Silhouette (8-bit)'
     obsessed['song'] = 'Obsessed'
+    incomplete['song'] = 'Incomplete'
+    happy['song'] = 'Happy'
+    lemmedown['song'] = 'Let Me Down'
+    charade['song'] = 'Charade'
+    friends['song'] = 'Friends'
+    savior['song'] = 'Savior'
+    prolly_nun['song'] = 'Probably Nothing'
+
 
     combined_songs = pd.concat([silhouette, itb, erberger, mr_nice_guy, my_brain,
-                            olay, prolly_nun, savior, itb_acous, erberger_acous, timeless, 
-                            backnforth, mb8bit, sil8bit, obsessed])
+                            olay, prolly_nun_acous, savior_acous, itb_acous, erberger_acous, timeless, 
+                            backnforth, mb8bit, sil8bit, obsessed, incomplete, happy, lemmedown, charade, 
+                            friends, savior, prolly_nun])
 
     combined_songs['date'] = pd.to_datetime(combined_songs['date'])
 
@@ -119,7 +136,9 @@ song_titles = ['Silhouette', 'In the Beginning', 'Airport Girl', 'Mr. Nice Guy',
                'My Brain is Carrying the World', 'One Look At You - Acoustic',
                'Probably Nothing - Acoustic', 'Savior - Acoustic',
                'In the Beginning - Acoustic', 'Airport Girl - Acoustic', 'Timeless',
-               'Back & Forth', 'My Brain (8-bit)', 'Silhouette (8-bit)', 'Obsessed']
+               'Back & Forth', 'My Brain (8-bit)', 'Silhouette (8-bit)', 'Obsessed',
+               'Incomplete', 'Happy', 'Let Me Down', 'Charade', 'Friends', 'Savior', 
+               'Probably Nothing']
 
 selected_songs = st.sidebar.multiselect(
     "Select Songs", options=song_titles, default=song_titles)
@@ -132,7 +151,10 @@ data_by_song = song_data[song_data['song'].isin(selected_songs)]
 
 tab20 = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', 
         '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
-        '#aec7e8', '#ffbb78', '#98df8a', '#ff9896', '#c5b0d5']
+        '#aec7e8', '#ffbb78', '#98df8a', '#ff9896', '#c5b0d5',
+        '#c49c94', '#f7b6d2', '#c7c7c7', '#dbdb8d', '#9edae5',
+        '#0B3C5D', '#8C3B00'] # '#0B6623', '#7A1E1E', '#4B306A', 
+        # '#4A2C1A', '#8B3A62', '#3A3A3A', '#4D5D12', '#0F4C5C'
 
 tab20_colors = mcolors.ListedColormap(tab20)
 
