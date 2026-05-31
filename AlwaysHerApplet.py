@@ -164,6 +164,13 @@ color_dict = {song: tab20_colors(i) for i, song in enumerate(song_titles)}
 
 
 # For tab1, col1
+timeless = data_by_song[data_by_song["song"] == "Timeless"] # diagnostic start
+
+st.write("Timeless Spotify sum:", timeless["spotify"].sum())
+
+st.write("Timeless selected_streams sum:",
+         timeless["selected_streams"].sum()) # diagnostic end
+
 song_summary = (data_by_song[data_by_song['selected_streams'] > 0]
                 .groupby('song', as_index=False)
                 .agg(Streams=('selected_streams', 'sum'),
@@ -178,6 +185,7 @@ song_summary["streams_per_day"] = song_summary["Streams"] / song_summary["Days"]
 song_summary = song_summary.sort_values(by='Streams', ascending=False)
 
 grand_total = song_summary["Streams"].sum()
+
 
 
 # For tab1, col2
